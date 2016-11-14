@@ -3,43 +3,41 @@ import os
 
 os.system("printf '\033c'")
 sys.stdout.write("\x1b[8;{rows};{cols}t".format(rows=30, cols=110))
-PLAYER = "@"
 
-def tablica(x, y):
-    lista = []
-    for rzad in range(x):
-        lista.append([])
+def terrain(x, y):
+    matrix = []
+    for row in range(x):
+        matrix.append([])
         for kolumn in range(y):
-            if rzad == 0 or rzad == x-1 or kolumn == 0 or kolumn == y-1:
-                lista[rzad].append('x')
+            if row == 0 or row == x-1 or kolumn == 0 or kolumn == y-1:
+                matrix[row].append('x')
             else:
-                lista[rzad].append('.')
-    return lista
+                matrix[row].append('.')
+    return matrix
 
 
-def drukowanie_tablicy(lista):
-    for i in lista:
+def display_terrain(matrix):
+    for i in matrix:
         print(''.join(i).rjust(105, " "))
 
 
-plansza = tablica(25,86)
-plansza[5][1] = "@"
+board = terrain(25,86)
+board[5][1] = "@"
 position_x = 1
 position_y = 1
 
 
-def player_position(lista,pos1,pos2):
-    x = [(index, row.index("@")) for index, row in enumerate(lista) if "@" in row]
-    print(x)
-    print(x[0][0])
-    lista [pos1][pos2] = "@"
-    lista [x[0][0]][x[0][1]] = "."
-    return lista
+def player_position(matrix,pos1,pos2):
+    x = [(index, row.index("@")) for index, row in enumerate(matrix) if "@" in row]
+    x = x[0]
+    matrix [pos1][pos2] = "@"
+    matrix [x[0]][x[1]] = "."
+    return matrix
 
-plansza = player_position(plansza,position_x,position_y)
+board = player_position(board,position_x,position_y)
 
 
-drukowanie_tablicy(plansza)
+display_terrain(board)
 
 while 1:
     def getch():
@@ -57,20 +55,16 @@ while 1:
 
     if x == "w":
         position_x = position_x - 1
-        position_y = position_y
     if x == "s":
         position_x = position_x + 1
-        position_y = position_y
     if x == "a":
-        position_x = position_x
         position_y = position_y - 1
     if x == "d":
-        position_x = position_x
         position_y = position_y + 1
 
 
 
-    plansza = player_position(plansza,position_x,position_y)
+    board = player_position(board,position_x,position_y)
 
     os.system("printf '\033c'")
-    drukowanie_tablicy(plansza)
+    display_terrain(board)
