@@ -23,21 +23,22 @@ def drukowanie_tablicy(lista):
 
 
 plansza = tablica(25,86)
-
+plansza[5][1] = "@"
 position_x = 1
 position_y = 1
 
 
 def player_position(lista,pos1,pos2):
-    lista.find("@")
+    x = [(index, row.index("@")) for index, row in enumerate(lista) if "@" in row]
+    print(x)
+    print(x[0][0])
     lista [pos1][pos2] = "@"
-    lista [oldpos1][oldpos2] = "."
-    return lista, pos1, pos2
+    lista [x[0][0]][x[0][1]] = "."
+    return lista
 
-wynik = player_position(plansza,position_x,position_y)
-plansza = wynik[0]
-old_position1 = wynik[1]
-old_position2 = wynik[2]
+plansza = player_position(plansza,position_x,position_y)
+
+
 drukowanie_tablicy(plansza)
 
 while 1:
@@ -69,9 +70,7 @@ while 1:
 
 
 
-    wynik = player_position(plansza,position_x,position_y,old_position1,old_position2)
-    plansza = wynik[0]
-    old_position1 = wynik[1]
-    old_position2 = wynik[2]
+    plansza = player_position(plansza,position_x,position_y)
+
     os.system("printf '\033c'")
     drukowanie_tablicy(plansza)
