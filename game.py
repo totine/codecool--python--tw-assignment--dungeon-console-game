@@ -8,29 +8,29 @@ position_x = 1
 position_y = 1
 
 
-def tablica(x, y):
-    lista = []
-    for rzad in range(x):
-        lista.append([])
-        for kolumn in range(y):
-            if rzad == 0 or rzad == x-1 or kolumn == 0 or kolumn == y-1:
-                lista[rzad].append('x')
+def background(x, y):
+    matrix = []
+    for row in range(x):
+        matrix.append([])
+        for column in range(y):
+            if row == 0 or row == x-1 or column == 0 or column == y-1:
+                matrix[row].append('x')
             else:
-                lista[rzad].append('.')
-    return lista
+                matrix[row].append('.')
+    return matrix
 
 
-def drukowanie_tablicy(lista):
-    for i in lista:
+def display_background(matrix):
+    for i in matrix:
         print(''.join(i).rjust(105, " "))
 
 
-def player_position(lista, pos1, pos2):
-    x = [(index, row.index("@")) for index, row in enumerate(lista) if "@" in row]
+def player_position(matrix, pos1, pos2):
+    x = [(index, row.index("@")) for index, row in enumerate(matrix) if "@" in row]
     x = x[0]
-    lista[pos1][pos2] = "@"
-    lista[x[0]][x[1]] = "."
-    return lista
+    matrix[pos1][pos2] = "@"
+    matrix[x[0]][x[1]] = "."
+    return matrix
 
 
 def getch():
@@ -51,26 +51,22 @@ def user_input(x):
     global position_x, position_y
     if x == "w":
         position_x = position_x - 1
-        position_y = position_y
     if x == "s":
         position_x = position_x + 1
-        position_y = position_y
     if x == "a":
-        position_x = position_x
         position_y = position_y - 1
     if x == "d":
-        position_x = position_x
         position_y = position_y + 1
 
 
-plansza = tablica(25, 86)
-plansza[1][1] = "@"
-drukowanie_tablicy(plansza)
+terrain = background(25, 86)
+terrain[1][1] = "@"
+display_background(terrain)
 
 
 while 1:
     x = getch()
     user_input(x)
-    plansza = player_position(plansza, position_x, position_y)
+    terrain = player_position(terrain, position_x, position_y)
     os.system("printf '\033c'")
-    drukowanie_tablicy(plansza)
+    display_background(terrain)
