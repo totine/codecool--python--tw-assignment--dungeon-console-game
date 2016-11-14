@@ -1,7 +1,7 @@
 import sys
 import os
 
-os.system('clear')
+os.system("printf '\033c'")
 sys.stdout.write("\x1b[8;{rows};{cols}t".format(rows=30, cols=110))
 
 
