@@ -4,7 +4,6 @@ import os
 
 os.system("printf '\033c'")
 sys.stdout.write("\x1b[8;{rows};{cols}t".format(rows=30, cols=110))
-PLAYER = "@"
 position_x = 1
 position_y = 1
 
@@ -28,8 +27,9 @@ def drukowanie_tablicy(lista):
 
 def player_position(lista, pos1, pos2):
     x = [(index, row.index("@")) for index, row in enumerate(lista) if "@" in row]
+    x = x[0]
     lista[pos1][pos2] = "@"
-    lista[x[0][0]][x[0][1]] = "."
+    lista[x[0]][x[1]] = "."
     return lista
 
 
