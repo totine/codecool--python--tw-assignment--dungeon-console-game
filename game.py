@@ -1,5 +1,4 @@
 from collections import Counter
-import csv
 import sys
 import os
 import random
@@ -9,10 +8,11 @@ import time
 
 global attributes
 attributes = {"strenght" : 2, "agility" : 2, "speed" : 2, "power" : 2, "endurance" : 2, "mana" : 2}
+starting_attributes = {}
 TERRX = 86
 TERRY = 25
 WINDOW_ROWS = 30
-WINDOW_COLS = 110
+WINDOW_COLS = 115
 RJUST_SIZE = 105
 MOB_TYPES = [u"\U0001F577", u"\U0001F6B9", u"\U0001F43A",u"\U0001F40D",u"\U0001F41B"]
 inv = {}
@@ -29,23 +29,257 @@ right_hand = [("sword", 1.5), ("wand", 0.2)]
 left_hand = [("shield", 3), ("spell book", 1)]
 os.system("printf '\033c'")
 sys.stdout.write("\x1b[8;{rows};{cols}t".format(rows=WINDOW_ROWS, cols=WINDOW_COLS))
+global left_column
+
+
+demon = ("""
+
+                                                        ,-.
+                                   ___,---.__          /'|`\          __,---,___
+                                ,-'    \`    `-.____,-'  |  `-.____,-'    //    `-.
+                              ,'        |           ~'\     /`~           |        `.
+                             /      ___//              `. ,'          ,  , \___      \\
+                            |    ,-'   `-.__   _         |        ,    __,-'   `-.    |
+                            |   /          /\_  `   .    |    ,      _/\          \   |
+                            \  |           \ \`-.___ \   |   / ___,-'/ /           |  /
+                             \  \           | `._   `\\  |  //'   _,' |           /  /
+                              `-.\         /'  _ `---'' , . ``---' _  `\         /,-'
+                                 ``       /     \    ,='/ \`=.    /     \       ''
+                                         |__   /|\_,--.,-.--,--._/|\   __|
+                                         /  `./  \\`\ |  |  | /,//' \,'  \\
+                                        /   /     ||--+--|--+-/-|     \   \\
+                                       |   |     /'\_\_\ | /_/_/`\     |   |
+                                        \   \__, \_     `~'     _/ .__/   /
+                                         `-._,-'   `-._______,-'   `-._,-'""")
+
+
+def satan():
+    os.system("printf '\033c'")
+    print(demon)
+    for i in range(5):
+        print("")
+    print("{:^120}".format("PUNY MORTAL!"))
+    text = getch()
+    if text == False:
+        pass
+    else:
+        os.system("printf '\033c'")
+        print(demon)
+        for i in range(5):
+            print("")
+        print("{:^120}".format("You have bestown upon the mightiest of all demons!"))
+        if getch() == False:
+            pass
+        else:
+            os.system("printf '\033c'")
+            print(demon)
+            for i in range(5):
+                print("")
+            print("{:^120}".format("TOTALLY BETTER THAN DIABLO!"))
+            if getch() == False:
+                pass
+            else:
+                os.system("printf '\033c'")
+                print(demon)
+                for i in range(5):
+                    print("")
+                print("{:^120}".format("Smashing you in combat wouldn't be a much of task for me..."))
+                if getch() == True:
+                    pass
+                else:
+                    os.system("printf '\033c'")
+                    print(demon)
+                    for i in range(5):
+                        print("")
+                    print("{:^130}".format("So lets play a game..."))
+                    os.system("printf '\033c'")
+
+
+def greetings():
+    print(demon)
+    for i in range(5):
+        print("")
+    print ('I am thinking of a 3-digit number. Try to guess what it is. If you dare.')
+    print ('\nI pity you, so here are some clues:')
+    print ('\nWhen I say:    That means:')
+    print ('\n  Cold       No digit is correct.')
+    print ('\n  Warm       One digit is correct but in the wrong position.')
+    print ('\n  Hot        One digit is correct and in the right position.')
+    print ('\nI have thought up a number. You have 10 guesses to get it.')
+
+
+def win():
+    print("{:^130}".format("YOU HAVE DEFEATED ME!"))
+    sys.exit()
+
+def gameover():
+    print("{:^130}".format("YOU HAVE LOST!"))
+    sys.exit()
+
+def level_up():
+    st_input = input('You leveled up. Type two first letters of an attribute you want to improve!')
+    if st_input == "st":
+        attributes['exp'] = 0
+        attributes['lev'] += 1
+        attributes["strenght"] += 1
+    elif st_input == "ag":
+        attributes['exp'] = 0
+        attributes['lev'] += 1
+        attributes["agility"] += 1
+    elif st_input == "sp":
+        attributes['exp'] = 0
+        attributes['lev'] += 1
+        attributes["speed"] += 1
+    elif st_input == "po":
+        attributes['exp'] = 0
+        attributes['lev'] += 1
+        attributes["power"] += 1
+    elif st_input == "en":
+        attributes['exp'] = 0
+        attributes['lev'] += 1
+        attributes["endurance"] += 1
+    elif st_input == "ma":
+        attributes['exp'] = 0
+        attributes['lev'] += 1
+        attributes["mana"] += 1
+    else:
+        st_input = input('That is not one of your attributes!')
+        level_up()
+    tristram()
+
+
+def boss():
+    satan()
+    greetings()
+    x = random.randint(1, 9)
+    y = random.randint(0, 9)
+    while x == y:
+        y = random.randint(0, 9)
+    z = random.randint(0, 9)
+    while z == y or z == x:
+        z = random.randint(0, 9)
+    xyz = list(str(x) + str(y) + str(z))
+    print(xyz)
+    user_input = ''
+    count = 0
+    while user_input != xyz:
+        count += 1
+        if count > 10:
+            gameover()
+        else:
+            user_input = input('Guess ').strip()
+            while len(user_input) != 3 or not user_input.isnumeric():
+                print('This is not even a three digit number!')
+                user_input = input('Guess ').strip()
+            user_input = list(user_input)
+            print(user_input)
+            if xyz == user_input:
+                print("You won")
+                level_up()
+            else:
+                a = ''
+                b = ''
+                c = ''
+                if xyz[0] == user_input[0]:
+                    a = 'hot'
+                elif user_input[0] in xyz:
+                    a = 'warm'
+                if xyz[1] == user_input[1]:
+                    b = 'hot'
+                elif user_input[1] in xyz:
+                    b = 'warm'
+                if xyz[2] == user_input[2]:
+                    c = 'hot'
+                elif user_input[2] in xyz:
+                    c = 'warm'
+                else:
+                    if [a, b, c] == ['', '', '']:
+                        a = 'cold'
+                abc = [a, b, c]
+                abc.sort()
+                if abc[0] == '':
+                    if abc[1] == '':
+                        print(abc[2])
+                    else:
+                        print(abc[1], abc[2])
+                else:
+                    print(abc[0], abc[1], abc[2])
 
 
 def equip(inv, items, equiped, stats):
     choice = input("Name the thing you want to equip: ")
-    if choice == 'helmet' or choice == 'cap':
+    equiped_check = [seq[1] for seq in equiped]
+    print(starting_attributes)
+    if choice == 'helmet':
         value = 'head'
-        stats["endurance"] += 1
-    elif choice == 'mail' or choice == 'robe':
+        if equiped_check[0] == "nothing":
+            stats["endurance"] += 1
+        elif equiped_check[0] == "cap":
+            stats["mana"] = starting_attributes["mana"]
+            stats["endurance"] += 1
+    elif choice == 'cap':
+        value = 'head'
+        if equiped_check[0] == "nothing":
+            stats["mana"] += 1
+        elif equiped_check[0] == "helmet":
+            stats["endurance"] = starting_attributes["endurance"]
+            stats["mana"] += 1
+    elif choice == 'mail':
         value = 'chest'
-        stats["endurance"] += 1
-    elif choice == 'graves' or choice == 'boots':
+        if equiped_check[1] == "nothing":
+            stats["endurance"] += 2
+        elif equiped_check[1] == "robe":
+            stats["mana"] = starting_attributes["mana"]
+            stats["endurance"] += 2
+    elif choice == 'robe':
+        value = 'chest'
+        if equiped_check[1] == "nothing":
+            stats["mana"] += 2
+        elif equiped_check[1] == "mail":
+            stats["endurance"] = starting_attributes["endurance"]
+            stats["mana"] += 2
+    elif choice == 'graves':
         value = 'legs'
-        stats["endurance"] += 1
-    elif choice == 'sword' or choice == 'wand':
+        if equiped_check[2] == "nothing":
+            stats["endurance"] += 1
+        elif equiped_check[2] == "boots":
+            stats["speed"] = starting_attributes["speed"]
+            stats["endurance"] += 1
+    elif choice == 'boots':
+        value = 'legs'
+        if equiped_check[2] == "nothing":
+            stats["speed"] += 1
+        elif equiped_check[2] == "graves":
+            stats["endurance"] = starting_attributes["endurance"]
+            stats["speed"] += 1
+    elif choice == 'sword':
         value = 'right hand'
-    elif choice == 'shield' or choice == 'spell book':
+        if equiped_check[3] == "nothing":
+            stats["strenght"] += 2
+        elif equiped_check[3] == "wand":
+            stats["power"] = starting_attributes["power"]
+            stats["strenght"] += 2
+    elif choice == 'wand':
+        value = 'right hand'
+        if equiped_check[3] == "nothing":
+            stats["power"] += 2
+        elif equiped_check[3] == "sword":
+            stats["strenght"] = starting_attributes["strenght"]
+            stats["power"] += 2
+    elif choice == 'shield':
         value = 'left hand'
+        if equiped_check[4] == "nothing":
+            stats["endurance"] += 2
+        elif equiped_check[4] == "spell book":
+            stats["mana"] = starting_attributes["mana"]
+            stats["endurance"] += 2
+    elif choice == 'spell book':
+        value = 'left hand'
+        if equiped_check[4] == "nothing":
+            stats["mana"] += 2
+        elif equiped_check[4] == "spell book":
+            stats["strenght"] = starting_attributes["strenght"]
+            stats["mana"] += 2
     keys = list(inv.keys())
     values = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0] for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
     if choice in keys and choice in values:
@@ -54,19 +288,19 @@ def equip(inv, items, equiped, stats):
             for idx, itm in enumerate(equiped):
                 if itm[0] == value:
                     equiped[idx] = (value, choice)
-            print("%s equiped" % choice)
+            print("%s equiped!" % choice)
             time.sleep(1)
-            stats = print_table(inv, equiped, items, left_column, stats)
+            stats = print_table(inv, equiped, items, stats)
         else:
             del inv[choice]
             for idx, itm in enumerate(equiped):
                 if itm[0] == value:
                     equiped[idx] = (value, choice)
-            print("%s equiped" % choice)
+            print("%s equiped!" % choice)
             time.sleep(1)
-            stats = print_table(inv, equiped, items, left_column, stats)
+            stats = print_table(inv, equiped, items, stats)
     else:
-        stats = print_table(inv, equiped, items, left_column, stats)
+        stats = print_table(inv, equiped, items, stats)
     return stats
 
 
@@ -77,12 +311,16 @@ def drop(inv, items,stats):
     if choice in keys and choice in values:
         if inv[choice] > 1:
             inv[choice] = inv[choice] - 1
-            print_table(inv, equiped, items, left_column, stats)
+            print("%s dropped!" % choice)
+            time.sleep(1)
+            print_table(inv, equiped, items, stats)
         else:
             del inv[choice]
-            print_table(inv, equiped, items, left_column, stats)
+            print("%s dropped!" % choice)
+            time.sleep(1)
+            print_table(inv, equiped, items, stats)
     else:
-        print_table(inv, equiped, items, left_column, stats)
+        print_table(inv, equiped, items, stats)
 
 
 def add_to_inventory(inventory, recivedloot):
@@ -122,7 +360,7 @@ def item_random(picked_loot, inventory):
         inv = add_to_inventory(inventory, picked_loot)
 
 
-def print_table(inventory, equiped, items, left_column, stats):
+def print_table(inventory, equiped, items, stats):
     """displays inventory in arranged manner, used once"""
     os.system("printf '\033c'")
     if inventory:
@@ -133,7 +371,7 @@ def print_table(inventory, equiped, items, left_column, stats):
     if len(inventory) > 0:
         sorted_tuples = sorted(inventory.items(), key=lambda x: -x[1])
         print("\t" * 5 + "{0:>7} {1:>{width}}".format("count", "item name", width=longest_item))
-        print("\t" * 5 + "-" * ((longest_item) + 18))
+        print("\t" * 5 + "-" * (longest_item + 18))
         nazwy = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
         wagi = [seq[1] for seq in head] + [seq[1] for seq in chest] + [seq[1] for seq in legs] + [seq[1] for seq in right_hand] + [seq[1] for seq in left_hand]
         suma_wag = []
@@ -177,9 +415,8 @@ def print_table(inventory, equiped, items, left_column, stats):
         elif decision == 'd':
             drop(inventory, items,stats)
         else:
-            os.system("printf '\033c'")
             return stats
-            display_background(terrain,left_column)
+            display_background(terrain, left_column)
     else:
         print("\n\t\t\t\t\tYou have nothing in your inventory. \n")
         print("\t" * 5 + "Equiped items: \n")
@@ -202,13 +439,16 @@ def character_creator():
         for i in range(2):
             d = random.choice(list(attributes.keys()))
             attributes[d] += 1
+        print("\n\n\n\n\n\n\n\n\n")
     def creator(attributes):
-        print("Create you character. Choose first of two abilities You'd like to expand (or q to go back):\n ")
+        print("\n\n\n\n\n\n\n")
+        print("{:^105}".format("Create you character.\n"))
+        print("{:^105}".format("Choose first of two abilities You'd like to expand (or q to go back):\n "))
 
         for i in attributes:
-            print(i, attributes.get(i))
+            print("{0:>45} {1:>15}".format(i, attributes.get(i)))
 
-        st_input = str(input("\nWrite a first character of ability you'd like to modify, \nq to get back to main menu or anything else to start over."))
+        st_input = str(input("\n\t\tWrite first two characters of ability you'd like to modify(anything else to back): "))
         os.system("printf '\033c'")
         if st_input == "st":
             attributes["strenght"] += 1
@@ -222,16 +462,15 @@ def character_creator():
             attributes["endurance"] += 1
         elif st_input == "ma":
             attributes["mana"] += 1
-        elif st_input == "q":
-            main_menu()
         else:
-            character_creator()
-        os.system("printf '\033c'")
-        print("")
-        for i in attributes:
-            print(i, attributes.get(i))
+            os.execl(sys.executable, sys.executable, *sys.argv)
 
-        st_input = str(input("Now, choose second ability (or anything else, If you'd like to start over): "))
+        print("\n\n\n\n\n\n\n\n\n")
+        print("{:^105}".format("Choose first of two abilities You'd like to expand (or q to go back):\n"))
+        for i in attributes:
+            print("{0:>45} {1:>15}".format(i, attributes.get(i)))
+
+        st_input = str(input("\n\t\tNow, choose second ability (or anything else, if you'd like to start over): "))
         if st_input == "st":
             attributes["strenght"] += 1
         elif st_input == "ag":
@@ -244,12 +483,9 @@ def character_creator():
             attributes["endurance"] += 1
         elif st_input == "ma":
             attributes["mana"] += 1
-        elif st_input == "q":
-            main_menu()
         else:
-            os.system("printf '\033c'")
-            character_creator()
-
+            os.execl(sys.executable, sys.executable, *sys.argv)
+    print("\n\n\n\n\n\n\n\n\n")
     print("{:^105}".format("1. Create new character\n"))
     print("{:^105}".format("2. Pick random character\n"))
     print("{:^105}".format("3. Go back"))
@@ -297,40 +533,49 @@ def character_creator():
     elif attributes["power"] == 3 and attributes["strenght"] == 3:
         char_class = "Templar"
     elif attributes["endurance"] == 3 and attributes["strenght"] == 3:
-        char_class = "Battle Mage"
+        char_class = "Warrior"
     elif attributes["speed"] == 3 and attributes["agility"] == 3:
         char_class = "Assasin"
     elif attributes["power"] == 3 and attributes["agility"] == 3:
-        char_class = "Shaman"
+        char_class = "Witch"
     elif attributes["endurance"] == 3 and attributes["agility"] == 3:
         char_class = "Fighter"
     elif attributes["mana"] == 3 and attributes["agility"] == 3:
         char_class = "Magician"
+    elif attributes["strenght"] == 3 and attributes["mana"] == 3:
+        char_class = "Shaman"
+    elif attributes["endurance"] == 3 and attributes["mana"] == 3:
+        char_class = "Battle Mage"
+    else:
+        char_class = "Folk"
 
-    name = input("Pick your's character name: ")
+    name = input("\t\t\t\t\tPick your's character name: ")
 
     attributes["Name"] = name
     attributes["Class"] = char_class
     os.system("printf '\033c'")
 
-    print("Your character is %s the %s" % (attributes["Name"], attributes["Class"]))
+    print("\n\n\n\n\n\n\n\n\n")
+    print("\t\t\t\tYour character is %s the %s\n" % (attributes["Name"], attributes["Class"]))
 
     for i in attributes:
         if attributes[i] == attributes["Name"]:
             continue
         if attributes[i] == attributes["Class"]:
             continue
-        print(i, attributes.get(i))
-
-    print("")
-    print("Press any key to proceed or r to try again.")
+        print("{0:>45} {1:>15}".format(i, attributes.get(i)))
+    global starting_attributes
+    starting_attributes = attributes.copy()
+    print("\n")
+    print("{:^105}".format("Press any key to proceed or 'r' to restart: "))
     fin_choice = getch()
     if fin_choice == "r":
-        os.system("printf '\033c'")
-        character_creator()
+        os.execl(sys.executable, sys.executable, *sys.argv)
     else:
         pass
-    attributes.update({'hp': int(10* attributes['endurance']), 'mp': int(10*attributes['mana']), 'exp': 0})
+        os.system("printf '\033c'")
+    attributes.update({'hp': int(10* attributes['endurance']), 'mp': int(10*attributes['mana']), 'exp': 51, 'lev': 1})
+    tristram()
     return attributes
 
 
@@ -368,7 +613,9 @@ def main_menu():
             main_menu()
     elif choice == "3":
         sys.exit()
-
+    else:
+        os.system("printf '\033c'")
+        main_menu()
 
 def background(x, y):
     matrix = []
@@ -382,21 +629,72 @@ def background(x, y):
     return matrix
 
 
-def display_background(matrix,right_column_text):
+def start_background():
+    matrix = [
+    list("##################################################################################################"),
+    list("#................................................................................................#"),
+    list("#...... .----| |-. ..............................................................................#"),
+    list("#..... /          \................................................###...........................#"),
+    list("#...../____________\ .............................................#o###..........................#"),
+    list("#.....||_|_| /  \  |............................................#####o###........................#"),
+    list("#.....||_|_| | .|  |...........................................#o#\#|#/###.......................#"),
+    list("#.....|______|__|__|............................................###\|/#o#........................#"),
+    list("#................................................................# }|{ #.........................#"),
+    list("#..................................................................|||...........................#"),
+    list("#............................................................................................... #"),
+    list("#......______________............................................................................#"),
+    list("#......|Not Tristram|.........................⛧..................................................#"),
+    list("#.......‾‾‾‾‾|‾|‾‾‾‾................................................................. ###........#"),
+    list("#...................................................................................#o###........#"),
+    list("#.....................................................................)............#####o###.....#"),
+    list("#................................................................/ \ ((...........#o#\#|#/###....#"),
+    list("#.............................................................../   \||............###\|/#o#.....#"),
+    list("#............................................"u"\U0001F6B9""................/     \|.............# }|{ #..\....#"),
+    list("#...................____-^-____.............................../.......\...............}|{........#"),
+    list("#................../     _   ' \..............................|,^, ,^,|..........................#"),
+    list("#................./     |_|     \.............................||_| |_||..........................#"),
+    list("#................/               \............................||_| |_||..........................#"),
+    list("#.............../|     _____     |\...........................|       |..........................#"),
+    list("#............... |    |==|==|    |............................'======='..........................#"),
+    list("#................|    |--|--|    |...............................................................#"),
+    list("#................|    |==|==|    |...............................................................#"),
+    list("#................^^^^^^^^^^^^^^^^^..............@................................................#"),
+    list("#................................................................................................#"),
+    list("##################################################################################################")]
+
+    return matrix
+
+
+def start_disp(matrix):
+    for i in matrix:
+        print("".join(i).rjust(RJUST_SIZE, " "))
+
+
+def display_background(matrix,left_column):
     #for i in matrix:
-    length_list_1 = [len(str(item[0])) for item in right_column_text]
-    length_list_2 = [len(str(item[1])) for item in right_column_text]
+    length_list_1 = [len(str(item[0])) for item in left_column]
+    length_list_2 = [len(str(item[1])) for item in left_column]
 
     max_size_1 = max(length_list_1) + 2
     max_size_2 = max(length_list_2) + 2
     #    print(''.join(i).rjust(RJUST_SIZE, " "))
     for i in range(0,len(matrix)):
-        if i < len(right_column_text):
-            print(right_column_text[i][0].ljust(max_size_1 , " "), str(right_column_text[i][1]).ljust(max_size_2 , " "), end="")
+        if i < len(left_column):
+            print(left_column[i][0].ljust(max_size_1 , " "), str(left_column[i][1]).ljust(max_size_2 , " "), end="")
             print(''.join(matrix[i]))
         else:
             print(''.join(matrix[i]).rjust(max_size_1 + max_size_2 + len(matrix[0]) + 1, " "))
 
+
+def random_barriers(game_matrix, max_size=15):
+    barrier_size_x = random.randint(1,max_size)
+    barrier_size_y = random.randint(1,max_size)
+    barrier_start_x = random.randint(1,len(game_matrix)-barrier_size_x)
+    barrier_start_y = random.randint(1,len(game_matrix[0])-barrier_size_y)
+    for i in range(barrier_start_x,barrier_start_x+barrier_size_x):
+        for j in range(barrier_start_y,barrier_start_y+barrier_size_y):
+            game_matrix[i][j] = "#"
+    return game_matrix
 
 
 def level_creating(game_matrix):
@@ -420,7 +718,7 @@ def mobs_positions(game_matrix, mob_list, TERRY, TERRX):
     mob_pos_x = random.randint(1, TERRY-1)
     mob_pos_y = random.randint(1, TERRX -1)
     mob_type = random.choice(mob_list)
-    if game_matrix[mob_pos_x][mob_pos_y] != "#":
+    if game_matrix[mob_pos_x][mob_pos_y] not in ["#","@"]:
         game_matrix[mob_pos_x][mob_pos_y] = mob_type
     return game_matrix
 
@@ -454,7 +752,7 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
             attributes['hp'] -= roll
             print('You lost ', str(roll), " health points. You have ", repr(attributes['hp']), " left.")
             if attributes['hp'] < 1:
-                print('Game over',u"\U0001F595")
+                print('Game over', u"\U0001F595")
                 time.sleep(1)
                 sys.exit()
             else:
@@ -487,11 +785,22 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                     attributes['hp'] -= roll
                     print('You lost ', str(roll), " health points. You have ", repr(attributes['hp']), " left.")
                     if attributes['hp'] < 1:
-                        print('Game over',u"\U0001F595")
+                        print('Game over', u"\U0001F595")
                         time.sleep(1)
                         sys.exit()
                     else:
-                        battle(matrix, new_pos1, new_pos2, mobhp,inv)
+                        battle(matrix, new_pos1, new_pos2, mobhp, inv)
+            else:
+                roll = (random.randint(1, 6)) + 3
+                attributes['hp'] -= roll
+                print('You lost ', str(roll), " health points. You have ", repr(attributes['hp']), " left.")
+                if attributes['hp'] < 1:
+                    print('Game over',u"\U0001F595")
+                    time.sleep(1)
+                    sys.exit()
+                else:
+                    battle(matrix, new_pos1, new_pos2, mobhp, inv)
+
     elif choice == '3':
         if attributes['mp']> 5:
             roll = (random.randint(1, 15)) + attributes['power']
@@ -509,7 +818,7 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                 attributes['hp'] -= roll
                 print('You lost ', str(roll), " health points. You have ", repr(attributes['hp']), " left.")
                 if attributes['hp'] < 1:
-                    print('Game over',u"\U0001F595")
+                    print('Game over', u"\U0001F595")
                     time.sleep(1)
                     sys.exit()
                 else:
@@ -557,22 +866,47 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
         else:
             roll = (random.randint(1, 6)) + 3
             attributes['hp'] -= roll
-            print('You regained 5 Health points. You have ', repr(attributes['hp']), " left.")
+            print('You lost ', repr(roll), ' Health points. You have ', repr(attributes['hp']), " left.")
             if attributes['hp'] < 1:
-                print('Game over',u"\U0001F595")
+                print('Game over', u"\U0001F595")
                 time.sleep(1)
                 sys.exit()
             else:
                 battle(matrix, new_pos1, new_pos2, mobhp,inv)
     else:
         battle(matrix, new_pos1, new_pos2, mobhp,inv)
-    #battle(matrix, new_pos1, new_pos2, mobhp, inv)
-            
+
+
+def game_over(matrix):
+    GAME_OVER = """  ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███
+     ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒
+    ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███      ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒
+    ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄    ▒██   ██░  ▒██ █░░▒▓█  ▄ ▒██▀▀█▄
+    ░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒   ░ ████▓▒░   ▒▀█░  ░▒████▒░██▓ ▒██▒
+     ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░   ░ ▒░▒░▒░    ░ ▐░  ░░ ▒░ ░░ ▒▓ ░▒▓░
+      ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░     ░ ▒ ▒░    ░ ░░   ░ ░  ░  ░▒ ░ ▒░
+    ░ ░   ░   ░   ▒   ░      ░      ░      ░ ░ ░ ▒       ░░     ░     ░░   ░
+          ░       ░  ░       ░      ░  ░       ░ ░        ░     ░  ░   ░
+                                                         ░                   """
+    print(len(matrix[0]), len(GAME_OVER[0]), len(matrix), len(GAME_OVER))
+    game_over_start_x = int(((len(matrix[0]) - len(GAME_OVER[0]))/2))
+    game_over_start_y = int(((len(matrix) - len(GAME_OVER))/2))
+    #overwrite matrix cell to ascii cells
+    for i in range(game_over_start_y, game_over_start_y + len(GAME_OVER)):
+        print(i)
+        for j in range(game_over_start_x, game_over_start_x + len(GAME_OVER[0])):
+            matrix[i][j] = GAME_OVER[i - game_over_start_y][j - game_over_start_x]
+            print(i,j)
+    return matrix
+
+
 def talk():
-    input('Hola! ')
-    x = input('No habla ingles! ')
-    while x:
-        x = input('No habla ingles! ')
+    x = input('Hello! Would you like to go back to definitely not Tristram? ').lower()
+    if x == 'yes' :
+        tristram()
+    else:
+        print('As you wish')
+        time.sleep(1)
 
 
 def encounter(matrix, new_pos1, new_pos2):
@@ -585,11 +919,144 @@ def encounter(matrix, new_pos1, new_pos2):
             battle(matrix, new_pos1, new_pos2,mobhp,inv)
         elif choice == 'talk':
             talk()
+        elif choice == 'sell':
+            sell(inv, equiped, items)
+        elif choice == 'buy':
+            buy(inv)
     else:
         print('You were attacked by a feroucious beast! ')
         print('1. Strong attack\n2. Quick attack\n3. Spell\n4. Use item\n5. Run ')
         battle(matrix, new_pos1, new_pos2,mobhp, inv)
     return matrix
+
+
+def sell(inventory, equiped, items):
+    os.system("printf '\033c'")
+    if inventory:
+        longest_item = len(max(inventory, key=len)) + 1
+        if longest_item < len("item name") + 1:
+            longest_item = len("item name") + 1
+    print("\n\t\t\t\t\t" * 5 + "Inventory: ")
+    if len(inventory) > 0:
+        sorted_tuples = sorted(inventory.items(), key=lambda x: -x[1])
+        print("\t" * 5 + "{0:>7} {1:>{width}}".format("count", "item name", width=longest_item))
+        print("\t" * 5 + "-" * ((longest_item) + 18))
+        nazwy = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
+        wagi = [seq[1] for seq in head] + [seq[1] for seq in chest] + [seq[1] for seq in legs] + [seq[1] for seq in right_hand] + [seq[1] for seq in left_hand]
+        suma_wag = []
+        suma_nazw = []
+        suma_liczb = []
+        for z in nazwy:
+            x = nazwy.index(z)
+            if z in inv:
+                k = wagi[x] * inv[z]
+                suma_wag.append(k)
+                suma_nazw.append(z)
+                suma_liczb.append(inv[z])
+        suma = sum(suma_wag)
+        for i in range(len(suma_liczb)):
+            print("\t" * 5 + "{0:>7} {1:>{width}} {2:>7}".format(suma_liczb[i], suma_nazw[i], float(suma_wag[i]),
+                                                                 width=longest_item))
+        if 'hp potion' in inv:
+            print("\t" * 5 + "{0:>7} {1:>{width}} {2:>7}".format(inv['hp potion'], "hp potion", "0.0",
+                                                                 width=longest_item))
+        if 'mana potion' in inv:
+            print("\t" * 5 + "{0:>7} {1:>{width}} {2:>7}".format(inv['mana potion'], "mana potion", "0.0",
+                                                                 width=longest_item))
+        if 'gold' in inv:
+            print("\t" * 5 + "{0:>7} {1:>{width}} {2:>7}".format(inv['gold'], "gold", "0.0", width=longest_item))
+        print("\t" * 5 + "-" * ((longest_item) + 18))
+        print("\t" * 5 + "Total number of items:", sum(inventory.values()))
+        print("\t" * 5 + "Total weight: %.1f" % suma)
+        choice = input("What do you want to sell?(n to exit): ")
+        keys = list(inv.keys())
+        values = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0] for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
+        if choice == "n":
+            pass
+        elif choice in keys and choice in values:
+            if inv[choice] > 1:
+                inv[choice] = inv[choice] - 1
+                inv['gold'] = inv['gold'] + 1
+                print("%s sold for 1 gold!" % choice)
+                time.sleep(1)
+                sell(inventory, equiped, items)
+            else:
+                del inv[choice]
+                inv['gold'] = inv['gold'] + 1
+                print("%s sold for 1 gold!" % choice)
+                time.sleep(1)
+                sell(inventory, equiped, items)
+        else:
+            print("Can't do that!")
+            time.sleep(1)
+            sell(inventory, equiped, items)
+    else:
+        print("Sell what? Look at you!")
+        time.sleep(1)
+
+
+def buy(inventory):
+    sys.stdout.write("\033[F")
+    sys.stdout.write("\033[K")
+    choice = input("What do you want? hp potion, or mana potion? 10 g each!: ")
+    sys.stdout.write("\033[F")
+    sys.stdout.write("\033[K")
+    while choice == "hp potion" or choice == "mana potion":
+        choice2 = input("How many?: ")
+        sys.stdout.write("\033[F")
+        sys.stdout.write("\033[K")
+        while not choice2.isnumeric():
+            print ("HOW MANY!!! Don't you understand?")
+            time.sleep(2)
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
+            choice2 = input("How many?: ")
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
+        choice2 = int(choice2)
+        if "gold" in inventory:
+            if choice == "hp potion":
+                if choice2 * 10 < inv['gold']:
+                    inv['gold'] = inv['gold'] - choice2 * 10
+                    inv['hp potion'] = inv['hp potion'] + choice2
+                    print("%d hp potion bought for %d gold!" % (choice2, choice2 * 10))
+                    time.sleep(2)
+                    break
+                elif choice2 * 10 == inv['gold']:
+                    del inv['gold']
+                    inv['hp potion'] = inv['hp potion'] + choice2
+                    print("%d hp potion bought for %d gold!" % (choice2, choice2 * 10))
+                    time.sleep(2)
+                    break
+                else:
+                    print("You poor bastard! You can't afford it!")
+                    time.sleep(2)
+                    break
+            elif choice == "mana potion":
+                if choice2 * 10 < inv['gold']:
+                    inv['gold'] = inv['gold'] - choice2 * 10
+                    inv['mana potion'] = inv['mana potion'] + choice2
+                    print("%d mana potion bought for %d gold!" % (choice2, choice2 * 10))
+                    time.sleep(2)
+                    break
+                elif choice2 * 10 == inv['gold']:
+                    del inv['gold']
+                    inv['mana potion'] = inv['mana potion'] + choice2
+                    print("%d mana potion bought for %d gold!" % (choice2, choice2 * 10))
+                    time.sleep(2)
+                    break
+                else:
+                    print("You poor bastard! You can't afford it!")
+                    time.sleep(2)
+                    break
+        else:
+            print("Gold? You know what it is don't you?")
+            time.sleep(2)
+            break
+    print("Hmmmm! Good bye! ")
+    time.sleep(2)
+    return
+
 
 def pick_up(matrix, new_pos1, new_pos2, inventory, items):
     #global inv
@@ -635,6 +1102,26 @@ def new_column(matrix):
     return last_column_list
 
 
+def player_tristram(matrix, pos1, pos2):
+    old_player_pos = [(index, row.index("@")) for index, row in enumerate(matrix) if "@" in row]
+    old_player_pos = old_player_pos[0]
+    old_pos1 = old_player_pos[0]
+    old_pos2 = old_player_pos[1]
+    new_pos1 = old_pos1 + pos1
+    new_pos2 = old_pos2 + pos2
+
+    if matrix[new_pos1][new_pos2] in ("#", "-", "|", "/", "o", "‾", "}", ")", "(", ",", "^", "=", "-", "^", "{", "_"):
+        return matrix
+    elif matrix[new_pos1][new_pos2] == "⛧":
+        go_to_dungeon()
+    elif matrix[new_pos1][new_pos2] == u"\U0001F6B9":
+        npc_tristram()
+    else:
+        matrix[new_pos1][new_pos2] = "@"
+        matrix[old_pos1][old_pos2] = "."
+    return matrix
+
+
 def player_position(matrix, pos1, pos2, MOB_TYPES, inventory, items, equiped):
     old_player_pos = [(index, row.index("@")) for index, row in enumerate(matrix) if "@" in row]
     old_player_pos = old_player_pos[0]
@@ -663,7 +1150,7 @@ def player_position(matrix, pos1, pos2, MOB_TYPES, inventory, items, equiped):
         npc_to_display = MOB_TYPES[npc_index]
         mob_list_without_npc = MOB_TYPES[:npc_index:]
         mob_chance = random.randint(1,100)
-        if mob_chance > 55:
+        if mob_chance > 40:
             mob_pos_x = random.randint(1,24)
             mob_type = random.choice(MOB_TYPES)
             if matrix[mob_pos_x][84] != "#":
@@ -674,7 +1161,7 @@ def player_position(matrix, pos1, pos2, MOB_TYPES, inventory, items, equiped):
             npc_type = random.choice(npc_to_display)
             if matrix[npc_pos_x][84] != "#":
                 matrix[npc_pos_x][84] = npc_type
-        item_chance = random.randint(1,1000)
+        item_chance = random.randint(1,2000)
         item_list = [item[1] for item in items]
         if item_chance < 2:
             item_pos_x = random.randint(1,24)
@@ -685,7 +1172,103 @@ def player_position(matrix, pos1, pos2, MOB_TYPES, inventory, items, equiped):
     else:
         matrix[new_pos1][new_pos2] = "@"
         matrix[old_pos1][old_pos2] = "."
+    for mob in MOB_TYPES:
+        for i in range(random.randint(3, 30)):
+            if mob == u"\U0001F6B9":
+                break
+            old_mob_pos = [(index, row.index(mob)) for index, row in enumerate(matrix) if mob in row]
+            if old_mob_pos == []:
+                break
+            old_mob_pos = old_mob_pos[0]
+            old_mob_pos1 = old_mob_pos[0]
+            old_mob_pos2 = old_mob_pos[1]
+            new_mob_pos1 = old_mob_pos1 + random.randint(-1, 1)
+            new_mob_pos2 = old_mob_pos2 + random.randint(-1, 1)
+            if matrix[new_mob_pos1][new_mob_pos2] != ".":
+                break
+            matrix[new_mob_pos1][new_mob_pos2] = mob
+            matrix[old_mob_pos1][old_mob_pos2] = "."
     return matrix
+
+
+def npc_tristram():
+    #os.system("printf '\033c'")
+    if attributes['exp']<50:
+        print("{:^70}""{:^70}".format("Only the worthy can battle the Lord of the Underworld!\n", "Get more experience!"))
+        time.sleep(1)
+        tristram()
+    else:
+        print("{:^70}""{:^70}".format("You may meet the Lord of the Underworld now!", ""))
+        boss()
+
+def go_to_dungeon():
+    terrain = background(TERRY, TERRX)
+    terrain[int(TERRY / 2)][1] = "@"
+    terrain = level_creating(terrain)
+    for i in range(10):
+        terrain = mobs_positions(terrain, MOB_TYPES, TERRY, TERRX)
+        terrain = items2_positions(terrain, MOB_TYPES, items)
+    while 1:
+        x = getch()
+        if x == 'p':
+            sys.exit()
+        if x == "i":
+            stats = print_table(inv, equiped, items, attributes)
+        if x == "1" and 'hp potion' in inv:
+            if attributes['hp'] > attributes['endurance'] * 10 - 5:
+                attributes['hp'] = attributes['endurance'] * 10
+            else:
+                attributes['hp'] += 5
+            if inv["hp potion"] > 1:
+                inv["hp potion"] = inv["hp potion"] - 1
+                os.system("printf '\033c'")
+                left_column = making_left_column(attributes, inv)
+                display_background(terrain, left_column)
+                x = getch()
+            else:
+                del inv["hp potion"]
+                os.system("printf '\033c'")
+                left_column = making_left_column(attributes, inv)
+                display_background(terrain, left_column)
+                x = getch()
+        if x == "2" and 'mana potion' in inv:
+            if attributes['mp'] > attributes['mana'] * 10 - 5:
+                attributes['mp'] = attributes['mana'] * 10
+            else:
+                attributes['mp'] += 5
+            if inv["mana potion"] > 1 or inv["mana potion" != "nothing"]:
+                inv["mana potion"] = inv["mana potion"] - 1
+                os.system("printf '\033c'")
+                left_column = making_left_column(attributes, inv)
+                display_background(terrain, left_column)
+                x = getch()
+            else:
+                del inv["mana potion"]
+                os.system("printf '\033c'")
+                left_column = making_left_column(attributes, inv)
+                display_background(terrain, left_column)
+                x = getch()
+        while x not in "wsad":
+            x = getch()
+        position = user_input(x)
+        terrain = player_position(terrain, position[0], position[1], MOB_TYPES, inv, items, equiped)
+        os.system("printf '\033c'")
+        left_column = making_left_column(attributes, inv)
+        display_background(terrain, left_column)
+
+
+def tristram():
+    start_terrain = start_background()
+    while 1:
+        x = getch()
+        if x == 'p':
+            sys.exit()
+        while x not in "wsad":
+            x = getch()
+        position = user_input(x)
+        start_terrain = player_tristram(start_terrain, position[0], position[1])
+        os.system("printf '\033c'")
+        start_disp(start_terrain)
 
 
 def new_column(matrix):
@@ -753,10 +1336,11 @@ def making_left_column(attributes, inv):
     blank_line = ["",""]
     line_1 = ["Name", attributes["Name"]]
     line_2 = ["Class", attributes["Class"]]
+    level_line = ["Level", attributes['lev']]
     line_3 = ["Agility", attributes["agility"]]
     line_4 = ["Speed", attributes["speed"]]
     line_5 = ["Strenght", attributes["strenght"]]
-    line_6 = ["Endurance", attributes["endurance"]]
+    line_6 = ["Power", attributes["power"]]
     line_7 = ["HP", str(attributes["hp"])+"/"+str(attributes["endurance"]*10)]
     line_8 = ["MP", str(attributes["mp"])+"/"+str(attributes["mana"]*10)]
     line_9 = ["Exp", attributes["mana"]]
@@ -772,68 +1356,17 @@ def making_left_column(attributes, inv):
     else:
         line_10 = ("Hp potions: ", "0")
         line_11 = ("Mana potions: ", "0")
-
-    left_column = [blank_line, blank_line, line_1, line_2, line_3, line_4, line_5, line_6, line_7, line_8, line_9, blank_line, line_10, line_11]
-
+    if 'gold' in keys:
+        line_12 = ("Gold:", str(inv["gold"]))
+    else:
+        line_12 = ("Gold:", "0")
+    left_column = [blank_line, blank_line, line_1, line_2, blank_line,level_line, blank_line, line_3, line_4, line_5, line_6, line_7, line_8, line_9, blank_line, line_10, line_11,blank_line, line_12]
     return left_column
 
 
 
-terrain = background(TERRY, TERRX)
-terrain[int(TERRY/2)][1] = "@"
-terrain = level_creating(terrain)
-for i in range(10):
-    terrain = mobs_positions(terrain, MOB_TYPES,TERRY, TERRX)
-    terrain = items2_positions(terrain, MOB_TYPES, items)
+
+
 main_menu()
-left_column = making_left_column(attributes,inv)
-display_background(terrain,left_column)
 
-while 1:
-    x = getch()
-    if x == 'p':
-        sys.exit()
-    if x == "i":
-        stats = print_table(inv, equiped, items, left_column, attributes)
-    if x == "1" and 'hp potion' in inv:
-        if attributes['hp'] > attributes['endurance']*10-5:
-            attributes['hp'] = attributes['endurance']*10
-        else:
-            attributes['hp'] +=5
-        if inv["hp potion"] > 1:
-            inv["hp potion"] = inv["hp potion"] - 1
-            os.system("printf '\033c'")
-            left_column = making_left_column(attributes, inv)
-            display_background(terrain, left_column)
-            x = getch()
-        else:
-            del inv["hp potion"]
-            os.system("printf '\033c'")
-            left_column = making_left_column(attributes, inv)
-            display_background(terrain, left_column)
-            x = getch()
-    if x == "2" and 'mana potion' in inv:
-        if attributes['mp'] > attributes['mana']*10-5:
-            attributes['mp'] = attributes['mana']*10
-        else:
-            attributes['mp'] +=5
-        if inv["mana potion"] > 1 or inv["mana potion" != "nothing"]:
-            inv["mana potion"] = inv["mana potion"] - 1
-            os.system("printf '\033c'")
-            left_column = making_left_column(attributes, inv)
-            display_background(terrain, left_column)
-            x = getch()
-        else:
-            del inv["mana potion"]
-            os.system("printf '\033c'")
-            left_column = making_left_column(attributes, inv)
-            display_background(terrain, left_column)
-            x = getch()
 
-    while x not in "wsad":
-        x = getch()
-    position = user_input(x)
-    terrain = player_position(terrain, position[0], position[1], MOB_TYPES, inv, items, equiped)
-    os.system("printf '\033c'")
-    left_column = making_left_column(attributes,inv)
-    display_background(terrain,left_column)
