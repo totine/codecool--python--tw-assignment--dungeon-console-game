@@ -149,7 +149,8 @@ def level_up():
         starting_attributes['lev'] += 1
         starting_attributes["mana"] += 1
     else:
-        st_input = input('That is not one of your attributes!(st/en/po/sp/ag/ma): ')
+        print("")
+        print('{0:^110}'.format("That is not one of your attributes!(st/en/po/sp/ag/ma): "))
         level_up()
     os.system("printf '\033c'")
     tristram()
