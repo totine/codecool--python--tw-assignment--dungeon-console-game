@@ -92,8 +92,9 @@ def satan():
 
 
 def greetings():
+    os.system("printf '\033c'")
     print(demon)
-    for i in range(5):
+    for i in range(3):
         print("")
     print ('I am thinking of a 3-digit number. I shall teach you if you guess.')
     print ('\nI pity you, so here are some clues:')
@@ -104,63 +105,53 @@ def greetings():
     print ('\nI have thought up a number. You have 10 guesses to get it.')
 
 
-def win():
-    print("{:^110}".format("YOU HAVE DEFEATED ME!"))
-    sys.exit()
 
 
-def gameover():
-    print("{:^110}".format("YOU HAVE LOST!"))
-    sys.exit()
+
 
 
 def level_up():
-    st_input = input('You leveled up. Type two first letters of an attribute you want to improve!: ')
+    st_input = input('\t\tYou leveled up. Type two first letters of an attribute you want to improve!: ')
     if st_input == "st":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["strenght"] += 1
-        starting_attributes['exp'] = 0
         starting_attributes['lev'] += 1
         starting_attributes["strenght"] += 1
     elif st_input == "ag":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["agility"] += 1
-        starting_attributes['exp'] = 0
         starting_attributes['lev'] += 1
         starting_attributes["agility"] += 1
     elif st_input == "sp":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["speed"] += 1
-        starting_attributes['exp'] = 0
         starting_attributes['lev'] += 1
         starting_attributes["speed"] += 1
     elif st_input == "po":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["power"] += 1
-        starting_attributes['exp'] = 0
         starting_attributes['lev'] += 1
         starting_attributes["power"] += 1
     elif st_input == "en":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["endurance"] += 1
-        starting_attributes['exp'] = 0
         starting_attributes['lev'] += 1
         starting_attributes["endurance"] += 1
     elif st_input == "ma":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["mana"] += 1
-        starting_attributes['exp'] = 0
         starting_attributes['lev'] += 1
         starting_attributes["mana"] += 1
     else:
         st_input = input('That is not one of your attributes!(st/en/po/sp/ag/ma): ')
         level_up()
+    os.system("printf '\033c'")
     tristram()
 
 
@@ -181,7 +172,7 @@ def boss():
     while user_input != xyz:
         count += 1
         if count > 10:
-            gameover()
+            boss_game_over()
         else:
             user_input = input('Guess: ').strip()
             while len(user_input) != 3 or not user_input.isnumeric():
@@ -190,7 +181,9 @@ def boss():
             user_input = list(user_input)
             print(user_input)
             if xyz == user_input:
-                print("You won")
+                print("")
+                print("{0:^110}".format("You have defated me! NOOOOOOOOOOOOOOOOOO!"))
+                time.sleep(1)
                 level_up()
             else:
                 a = ''
@@ -547,7 +540,7 @@ def character_creator():
     elif attributes["strenght"] == 3 and attributes["agility"] == 3:
         char_class = "Thug"
     elif attributes["speed"] == 3 and attributes["strenght"] == 3:
-        char_class = "Sellsword"
+        char_class = "Fighter"
     elif attributes["power"] == 3 and attributes["strenght"] == 3:
         char_class = "Templar"
     elif attributes["endurance"] == 3 and attributes["strenght"] == 3:
@@ -557,7 +550,7 @@ def character_creator():
     elif attributes["power"] == 3 and attributes["agility"] == 3:
         char_class = "Witch"
     elif attributes["endurance"] == 3 and attributes["agility"] == 3:
-        char_class = "Fighter"
+        char_class = "Sellsword"
     elif attributes["mana"] == 3 and attributes["agility"] == 3:
         char_class = "Magician"
     elif attributes["strenght"] == 3 and attributes["mana"] == 3:
@@ -803,8 +796,9 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
             sys.stdout.write("\033[F")
             sys.stdout.write("\033[K")
             if attributes['hp'] < 1:
-                print('Game over', u"\U0001F595")
-                time.sleep(1)
+                matrix = game_over(matrix)
+                os.system("printf '\033c'")
+                display_background(matrix,[["",""]])
                 sys.exit()
             else:
                 battle(matrix, new_pos1, new_pos2, mobhp, inv)
@@ -858,8 +852,9 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                     sys.stdout.write("\033[F")
                     sys.stdout.write("\033[K")
                     if attributes['hp'] < 1:
-                        print('Game over', u"\U0001F595")
-                        time.sleep(1)
+                        matrix = game_over(matrix)
+                        os.system("printf '\033c'")
+                        display_background(matrix,[["",""]])
                         sys.exit()
                     else:
                         battle(matrix, new_pos1, new_pos2, mobhp, inv)
@@ -875,8 +870,9 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                 sys.stdout.write("\033[F")
                 sys.stdout.write("\033[K")
                 if attributes['hp'] < 1:
-                    print('Game over', u"\U0001F595")
-                    time.sleep(1)
+                    matrix = game_over(matrix)
+                    os.system("printf '\033c'")
+                    display_background(matrix,[["",""]])
                     sys.exit()
                 else:
                     battle(matrix, new_pos1, new_pos2, mobhp, inv)
@@ -912,8 +908,9 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                 sys.stdout.write("\033[F")
                 sys.stdout.write("\033[K")
                 if attributes['hp'] < 1:
-                    print('Game over', u"\U0001F595")
-                    time.sleep(1)
+                    matrix = game_over(matrix)
+                    os.system("printf '\033c'")
+                    display_background(matrix,[["",""]])
                     sys.exit()
                 else:
                     battle(matrix, new_pos1, new_pos2, mobhp, inv)
@@ -996,17 +993,18 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
             attributes['hp'] -= roll
             print('You lost ', repr(roll), ' Health points. You have ', repr(attributes['hp']), " left.")
             if attributes['hp'] < 1:
-                print('Game over', u"\U0001F595")
-                time.sleep(1)
+                matrix = game_over(matrix)
+                os.system("printf '\033c'")
+                display_background(matrix,[["",""]])
                 sys.exit()
             else:
                 battle(matrix, new_pos1, new_pos2, mobhp, inv)
     else:
         battle(matrix, new_pos1, new_pos2, mobhp, inv)
 
-
-def game_over(matrix):
-    GAME_OVER = """  ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███
+def boss_game_over():
+    GAME_OVER = """
+      ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███
      ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒
     ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███      ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒
     ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄    ▒██   ██░  ▒██ █░░▒▓█  ▄ ▒██▀▀█▄
@@ -1016,14 +1014,42 @@ def game_over(matrix):
     ░ ░   ░   ░   ▒   ░      ░      ░      ░ ░ ░ ▒       ░░     ░     ░░   ░
           ░       ░  ░       ░      ░  ░       ░ ░        ░     ░  ░   ░
                                                          ░                   """
-    print(len(matrix[0]), len(GAME_OVER[0]), len(matrix), len(GAME_OVER))
-    game_over_start_x = int(((len(matrix[0]) - len(GAME_OVER[0])) / 2))
-    game_over_start_y = int(((len(matrix) - len(GAME_OVER)) / 2))
-    for i in range(game_over_start_y, game_over_start_y + len(GAME_OVER)):
-        print(i)
-        for j in range(game_over_start_x, game_over_start_x + len(GAME_OVER[0])):
-            matrix[i][j] = GAME_OVER[i - game_over_start_y][j - game_over_start_x]
-            print(i, j)
+    os.system("printf '\033c'")
+    print("{0:^110}".format(GAME_OVER))
+    sys.exit()
+
+def game_over(matrix):
+    GAME_OVER = """
+      ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███
+     ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒
+    ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███      ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒
+    ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄    ▒██   ██░  ▒██ █░░▒▓█  ▄ ▒██▀▀█▄
+    ░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒   ░ ████▓▒░   ▒▀█░  ░▒████▒░██▓ ▒██▒
+     ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░   ░ ▒░▒░▒░    ░ ▐░  ░░ ▒░ ░░ ▒▓ ░▒▓░
+      ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░     ░ ▒ ▒░    ░ ░░   ░ ░  ░  ░▒ ░ ▒░
+    ░ ░   ░   ░   ▒   ░      ░      ░      ░ ░ ░ ▒       ░░     ░     ░░   ░
+          ░       ░  ░       ░      ░  ░       ░ ░        ░     ░  ░   ░
+                                                         ░                   """
+    ascii_prepare = GAME_OVER.split("\n")
+    ascii_matrix = []
+    for i in range(len(ascii_prepare)):
+        ascii_matrix.append(list(ascii_prepare[i]))
+    ascii_len_list = []
+    for i in range(len(ascii_matrix)):
+        ascii_len_list.append(len(ascii_matrix[i]))
+    for j in range(max(ascii_len_list)-min(ascii_len_list)):
+        for i in range(len(ascii_matrix)):
+            if len(ascii_matrix[i]) < max(ascii_len_list):
+                ascii_matrix[i].append(" ")
+
+    print(len(matrix[0]), len(ascii_matrix[0]), len(matrix), len(ascii_matrix))
+    game_over_start_x = int(((len(matrix[0]) - len(ascii_matrix[0])) / 2))
+    game_over_start_y = int(((len(matrix) - len(ascii_matrix)) / 2))
+    for i in range(game_over_start_y, game_over_start_y + len(ascii_matrix)):
+
+        for j in range(game_over_start_x, game_over_start_x + len(ascii_matrix[0])):
+            matrix[i][j] = ascii_matrix[i - game_over_start_y][j - game_over_start_x]
+
     return matrix
 
 
@@ -1482,7 +1508,7 @@ def making_left_column(attributes, inv):
     line_6 = ["Power", attributes["power"]]
     line_7 = ["HP", str(attributes["hp"]) + "/" + str(attributes["endurance"] * 10)]
     line_8 = ["MP", str(attributes["mp"]) + "/" + str(attributes["mana"] * 10)]
-    line_9 = ["Exp", attributes["mana"]]
+    line_9 = ["Exp", attributes["exp"]]
     if "hp potion" in keys and "mana potion" in keys:
         line_10 = ("Hp potions:", str(inv["hp potion"]))
         line_11 = ("Mana potions:", str(inv["mana potion"]))
