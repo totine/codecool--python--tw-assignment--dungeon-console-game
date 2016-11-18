@@ -68,17 +68,13 @@ def satan():
         for i in range(5):
             print("")
         print("{:^120}".format("You have bestown upon the mightiest of all demons!"))
-        if getch() == False:
-            pass
-        else:
+        if getch():
             os.system("printf '\033c'")
             print(demon)
             for i in range(5):
                 print("")
             print("{:^120}".format("TOTALLY BETTER THAN DIABLO!"))
-            if getch() == False:
-                pass
-            else:
+            if getch():
                 os.system("printf '\033c'")
                 print(demon)
                 for i in range(5):
@@ -109,12 +105,12 @@ def greetings():
 
 
 def win():
-    print("{:^130}".format("YOU HAVE DEFEATED ME!"))
+    print("{:^110}".format("YOU HAVE DEFEATED ME!"))
     sys.exit()
 
 
 def gameover():
-    print("{:^130}".format("YOU HAVE LOST!"))
+    print("{:^110}".format("YOU HAVE LOST!"))
     sys.exit()
 
 
@@ -229,7 +225,6 @@ def boss():
 def equip(inv, items, equiped, stats):
     choice = input("Name the thing you want to equip: ")
     equiped_check = [seq[1] for seq in equiped]
-    print(starting_attributes)
     if choice == 'helmet':
         value = 'head'
         if equiped_check[0] == "nothing":
@@ -302,7 +297,7 @@ def equip(inv, items, equiped, stats):
             stats["mana"] += 2
     keys = list(inv.keys())
     values = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0]
-                                                                                                for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
+              for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
     if choice in keys and choice in values:
         if inv[choice] > 1:
             inv[choice] = inv[choice] - 1
@@ -329,7 +324,7 @@ def drop(inv, items, stats):
     choice = input("Name the thing you want to drop: ")
     keys = list(inv.keys())
     values = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0]
-                                                                                                for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
+              for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
     if choice in keys and choice in values:
         if inv[choice] > 1:
             inv[choice] = inv[choice] - 1
@@ -383,7 +378,6 @@ def item_random(picked_loot, inventory):
 
 
 def print_table(inventory, equiped, items, stats):
-    """displays inventory in arranged manner, used once"""
     os.system("printf '\033c'")
     if inventory:
         longest_item = len(max(inventory, key=len)) + 1
@@ -395,9 +389,9 @@ def print_table(inventory, equiped, items, stats):
         print("\t" * 5 + "{0:>7} {1:>{width}}".format("count", "item name", width=longest_item))
         print("\t" * 5 + "-" * (longest_item + 18))
         nazwy = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0]
-                                                                        for seq in legs] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
+                 for seq in legs] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
         wagi = [seq[1] for seq in head] + [seq[1] for seq in chest] + [seq[1]
-                                                                       for seq in legs] + [seq[1] for seq in right_hand] + [seq[1] for seq in left_hand]
+                 for seq in legs] + [seq[1] for seq in right_hand] + [seq[1] for seq in left_hand]
         suma_wag = []
         suma_nazw = []
         suma_liczb = []
@@ -439,8 +433,8 @@ def print_table(inventory, equiped, items, stats):
         elif decision == 'd':
             drop(inventory, items, stats)
         else:
-            return stats
             display_background(terrain, left_column)
+            return stats
     else:
         print("\n\t\t\t\t\tYou have nothing in your inventory. \n")
         print("\t" * 5 + "Equiped items: \n")
@@ -472,7 +466,7 @@ def character_creator():
         for i in attributes:
             print("{0:>45} {1:>15}".format(i, attributes.get(i)))
 
-        st_input = str(input("\n\t\tWrite first two characters of ability you'd like to modify(anything else to back): "))
+        st_input = str(input("\n\t\tWrite first two characters of ability you'd like to modify(ath else to back): "))
         os.system("printf '\033c'")
         if st_input == "st":
             attributes["strenght"] += 1
@@ -718,13 +712,10 @@ def start_disp(matrix):
 
 
 def display_background(matrix, left_column):
-    # for i in matrix:
     length_list_1 = [len(str(item[0])) for item in left_column]
     length_list_2 = [len(str(item[1])) for item in left_column]
-
     max_size_1 = max(length_list_1) + 2
     max_size_2 = max(length_list_2) + 2
-    #    print(''.join(i).rjust(RJUST_SIZE, " "))
     for i in range(0, len(matrix)):
         if i < len(left_column):
             print(left_column[i][0].ljust(max_size_1, " "), str(left_column[i][1]).ljust(max_size_2, " "), end="")
@@ -1026,7 +1017,6 @@ def game_over(matrix):
     print(len(matrix[0]), len(GAME_OVER[0]), len(matrix), len(GAME_OVER))
     game_over_start_x = int(((len(matrix[0]) - len(GAME_OVER[0])) / 2))
     game_over_start_y = int(((len(matrix) - len(GAME_OVER)) / 2))
-    # overwrite matrix cell to ascii cells
     for i in range(game_over_start_y, game_over_start_y + len(GAME_OVER)):
         print(i)
         for j in range(game_over_start_x, game_over_start_x + len(GAME_OVER[0])):
@@ -1335,7 +1325,7 @@ def player_position(matrix, pos1, pos2, MOB_TYPES, inventory, items, equiped):
 
 
 def npc_tristram():
-    #os.system("printf '\033c'")
+    os.system("printf '\033c'")
     if attributes['exp'] < 50:
         print("{:^70}""{:^70}".format("Only the worthy can battle the Lord of the Underworld!\n", "Get more experience!"))
         time.sleep(1)
