@@ -11,7 +11,7 @@ attributes = {"strenght" : 2, "agility" : 2, "speed" : 2, "power" : 2, "enduranc
 starting_attributes = {}
 TERRX = 86
 TERRY = 25
-WINDOW_ROWS = 30
+WINDOW_ROWS = 35
 WINDOW_COLS = 115
 RJUST_SIZE = 105
 MOB_TYPES = [u"\U0001F577", u"\U0001F6B9", u"\U0001F43A",u"\U0001F40D",u"\U0001F41B"]
@@ -99,7 +99,7 @@ def greetings():
     print(demon)
     for i in range(5):
         print("")
-    print ('I am thinking of a 3-digit number. Try to guess what it is. If you dare.')
+    print ('I am thinking of a 3-digit number. I shall teach you if you guess.')
     print ('\nI pity you, so here are some clues:')
     print ('\nWhen I say:    That means:')
     print ('\n  Cold       No digit is correct.')
@@ -580,19 +580,21 @@ def character_creator():
 
 
 def main_menu():
-    title = ["______                                    _ ",
-     "|  _  \                                  | |",
-      "| | | |_   _ _ __   __ _  ___  ___  _ __ | |",
-    "| | | | | | | '_ \ / _` |/ _ \/ _ \| '_ \| |",
-     "| |/ /| |_| | | | | (_| |  __/ (_) | | | |_|",
-      " ___/  \__,_|_| |_|\__, |\___|\___/|_| |_(_)",
-    "                    __/ |                   ",
-     "                   |___/                    "]
+    title = [" _        _______ _________   ______  _________ _______  ______   _        _______ ",
+     "( (    /|(  ___  )\__   __/  (  __  \ \__   __/(  ___  )(  ___ \ ( \      (  ___  )",
+      "|  \  ( || (   ) |   ) (     | (  \  )   ) (   | (   ) || (   ) )| (      | (   ) |",
+    "|   \ | || |   | |   | |     | |   ) |   | |   | (___) || (__/ / | |      | |   | |",
+     "| (\ \) || |   | |   | |     | |   | |   | |   |  ___  ||  __ (  | |      | |   | |",
+      "| | \   || |   | |   | |     | |   ) |   | |   | (   ) || (  \ \ | |      | |   | |",
+    "| )  \  || (___) |   | |     | (__/  )___) (___| )   ( || )___) )| (____/\| (___) |",
+     "|/    )_)(_______)   )_(     (______/ \_______/|/     \||/ \___/ (_______/(_______)",
+     "                                                                                   "]
+
     for line in title:
-        print("{:>75}".format(line))
-    m_l = [("" * 2), "1.Start Game", "2.Help", "3.Quit"]
+        print("{:>110}".format(line))
+    m_l = [("" * 2), "1.Start Game", "2.Help", "3.Credits", "4.Quit"]
     for n in m_l:
-        print("{:^105}".format(n))
+        print("{:^130}".format(n))
 
     choice = getch()
 
@@ -600,18 +602,36 @@ def main_menu():
         os.system("printf '\033c'")
         character_creator()
     elif choice == "2":
+
+        help_l = [("" * 10), "HELP", "Use WSAD for moving your character.", "I - Inventory",
+                  "P - Quit Game", "1 - Potion"]
         os.system("printf '\033c'")
-        help_l = [("" * 10), "HELP", "Use WSAD for moving your character.", "That's all for now.", ""]
         for i in help_l:
-            print("{:^105}".format(i))
-        ib = input("{:^105}".format("Press ENTER to go back"))
-        if ib == False:
+            print("{:^110}".format(i))
+        print("{:^110}".format("Press ENTER to go back"))
+        if getch() == True:
             os.system("printf '\033c'")
             main_menu()
         else:
             os.system("printf '\033c'")
             main_menu()
     elif choice == "3":
+        print("{:^120}".format("CREDITS"))
+        print("")
+        credits = [("" * 10), "Michał Goździkiewicz", "Joanna Gargaś", "Marek Frankowicz", "Łukasz Bielenin"]
+        os.system("printf '\033c'")
+        print("")
+        for s in credits:
+            print("{:^110}".format(s))
+        print("")
+        print("{:^110}".format("Press any key to go back"))
+        if getch() == True:
+            os.system("printf '\033c'")
+            main_menu()
+        else:
+            os.system("printf '\033c'")
+            main_menu()
+    elif choice == "4":
         sys.exit()
     else:
         os.system("printf '\033c'")
@@ -734,13 +754,17 @@ def items2_positions(game_matrix, mob_list, items):
 
 
 def battle(matrix, new_pos1, new_pos2, mobhp, inv):
-
     choice = getch()
-
     if choice == '1':
-        roll = (random.randint(1,10)) + attributes["strenght"]
+        roll = (random.randint(1, 10)) + attributes["strenght"]
         mobhp -= roll
-        print('Your hit dealt ', str(roll), ' damage')
+        print('Your hit dealt ', str(roll), ' damage.')
+        print('Enemy have %d HP left.' % mobhp)
+        time.sleep(1)
+        sys.stdout.write("\033[F")
+        sys.stdout.write("\033[K")
+        sys.stdout.write("\033[F")
+        sys.stdout.write("\033[K")
         if mobhp < 1:
             print('You won!')
             attributes['exp'] += 5
@@ -751,16 +775,29 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
             roll = (random.randint(1, 6)) + 3
             attributes['hp'] -= roll
             print('You lost ', str(roll), " health points. You have ", repr(attributes['hp']), " left.")
+            print(
+                'Enemy have %d HP left.' % mobhp)
+            time.sleep(1)
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
             if attributes['hp'] < 1:
                 print('Game over', u"\U0001F595")
                 time.sleep(1)
                 sys.exit()
             else:
-                battle(matrix, new_pos1, new_pos2, mobhp,inv)
+                battle(matrix, new_pos1, new_pos2, mobhp, inv)
     elif choice == '2':
         roll = (random.randint(1, 6))
         mobhp -= roll
         print('Your hit dealt ', str(roll), ' damage')
+        print('Enemy have %d HP left.' % mobhp)
+        time.sleep(1)
+        sys.stdout.write("\033[F")
+        sys.stdout.write("\033[K")
+        sys.stdout.write("\033[F")
+        sys.stdout.write("\033[K")
         if mobhp < 1:
             print('You won!')
             attributes['exp'] += 5
@@ -771,9 +808,18 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
             roll2 = (random.randint(1, 20)) + attributes["agility"]
             if roll2 > 15:
                 print('Your agility allowed a second hit!')
-                roll = (random.randint(1, 6)) + int(attributes["agility"]/2)
+                roll = (random.randint(1, 6)) + int(attributes["agility"] / 2)
                 mobhp -= roll
                 print('Your hit dealt ', str(roll), ' damage')
+                print(
+                    'Enemy have %d HP left.' % mobhp)
+                time.sleep(1)
+                sys.stdout.write("\033[F")
+                sys.stdout.write("\033[K")
+                sys.stdout.write("\033[F")
+                sys.stdout.write("\033[K")
+                sys.stdout.write("\033[F")
+                sys.stdout.write("\033[K")
                 if mobhp < 1:
                     print('You won!')
                     attributes['exp'] += 5
@@ -784,6 +830,13 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                     roll = (random.randint(1, 6)) + 3
                     attributes['hp'] -= roll
                     print('You lost ', str(roll), " health points. You have ", repr(attributes['hp']), " left.")
+                    print(
+                        'Enemy have %d HP left.' % mobhp)
+                    time.sleep(1)
+                    sys.stdout.write("\033[F")
+                    sys.stdout.write("\033[K")
+                    sys.stdout.write("\033[F")
+                    sys.stdout.write("\033[K")
                     if attributes['hp'] < 1:
                         print('Game over', u"\U0001F595")
                         time.sleep(1)
@@ -794,19 +847,33 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                 roll = (random.randint(1, 6)) + 3
                 attributes['hp'] -= roll
                 print('You lost ', str(roll), " health points. You have ", repr(attributes['hp']), " left.")
+                print(
+                    'Enemy have %d HP left.' % mobhp)
+                time.sleep(1)
+                sys.stdout.write("\033[F")
+                sys.stdout.write("\033[K")
+                sys.stdout.write("\033[F")
+                sys.stdout.write("\033[K")
                 if attributes['hp'] < 1:
-                    print('Game over',u"\U0001F595")
+                    print('Game over', u"\U0001F595")
                     time.sleep(1)
                     sys.exit()
                 else:
                     battle(matrix, new_pos1, new_pos2, mobhp, inv)
 
     elif choice == '3':
-        if attributes['mp']> 5:
+        if attributes['mp'] > 5:
             roll = (random.randint(1, 15)) + attributes['power']
-            attributes['mp'] -=5
+            attributes['mp'] -= 5
             mobhp -= roll
             print('Your spell dealt ', str(roll), ' damage. You have ', repr(attributes['mp']), " mana left.")
+            print(
+                'Enemy have %d HP left.' % mobhp)
+            time.sleep(1)
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
             if mobhp < 1:
                 print('You won!')
                 attributes['exp'] += 5
@@ -817,45 +884,86 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                 roll = (random.randint(1, 6)) + 3
                 attributes['hp'] -= roll
                 print('You lost ', str(roll), " health points. You have ", repr(attributes['hp']), " left.")
+                print(
+                    'Enemy have %d HP left.' % mobhp)
+                time.sleep(1)
+                sys.stdout.write("\033[F")
+                sys.stdout.write("\033[K")
+                sys.stdout.write("\033[F")
+                sys.stdout.write("\033[K")
                 if attributes['hp'] < 1:
                     print('Game over', u"\U0001F595")
                     time.sleep(1)
                     sys.exit()
                 else:
-                    battle(matrix, new_pos1, new_pos2, mobhp,inv)
+                    battle(matrix, new_pos1, new_pos2, mobhp, inv)
         else:
             print('You do not have enough mana!')
-            battle(matrix, new_pos1, new_pos2, mobhp,inv)
+            time.sleep(1)
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
+            battle(matrix, new_pos1, new_pos2, mobhp, inv)
     elif choice == '4':
-        print('Would you like to use\n1. Health potion or\n2. Mana potion?')
-        x = getch()
-        if x == "1":
-            if 'hp potion' in inv:
-                attributes['hp'] += 5
-                print('You regained 5 Health points. You have ', repr(attributes['hp']), " left.")
-                if inv["hp potion"] > 1:
-                    inv["hp potion"] = inv["hp potion"] - 1
-                    battle(matrix, new_pos1, new_pos2, mobhp, inv)
+        if "hp potion" in inv or "mana potion" in inv:
+            print('Would you like to use\n1. Health potion or\n2. Mana potion?')
+            x = getch()
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
+            if x == "1":
+                if 'hp potion' in inv:
+                    if attributes['hp'] >= attributes['endurance'] * 10 - 5:
+                        attributes['hp'] = attributes['endurance'] * 10
+                    else:
+                        attributes['hp'] += 5
+                    print('You regained 5 Health points. You have ', repr(attributes['hp']), " left.")
+                    time.sleep(2)
+                    sys.stdout.write("\033[F")
+                    sys.stdout.write("\033[K")
+                    if inv["hp potion"] > 1:
+                        inv["hp potion"] = inv["hp potion"] - 1
+                        battle(matrix, new_pos1, new_pos2, mobhp, inv)
+                    else:
+                        del inv["hp potion"]
+                        battle(matrix, new_pos1, new_pos2, mobhp, inv)
                 else:
-                    del inv["hp potion"]
+                    print('You have no Health potions left!')
+                    time.sleep(1)
+                    sys.stdout.write("\033[F")
+                    sys.stdout.write("\033[K")
+            if x == "2":
+                if 'mana potion' in inv:
+                    if attributes['mp'] >= attributes['mana'] * 10 - 5:
+                        attributes['mp'] = attributes['mana'] * 10
+                    else:
+                        attributes['hp'] += 5
+                    print('You regained 5 Mana points. You have ', repr(attributes['mp']), " left.")
+                    time.sleep(2)
+                    sys.stdout.write("\033[F")
+                    sys.stdout.write("\033[K")
+                    if inv["mana potion"] > 1 or inv["mana potion" != "nothing"]:
+                        inv["mana potion"] = inv["mana potion"] - 1
+                        battle(matrix, new_pos1, new_pos2, mobhp, inv)
+                    else:
+                        del inv["mana potion"]
+                        battle(matrix, new_pos1, new_pos2, mobhp, inv)
+                else:
+                    print('You have no Health potions left!')
+                    time.sleep(2)
+                    sys.stdout.write("\033[F")
+                    sys.stdout.write("\033[K")
                     battle(matrix, new_pos1, new_pos2, mobhp, inv)
             else:
-                print('You have no Health potions left!')
-        if x == "2":
-            if 'mana potion' in inv:
-                attributes['mp'] += 5
-                print('You regained 5 Mana points. You have ', repr(attributes['mp']), " left.")
-                if inv["mana potion"] > 1 or inv["mana potion" != "nothing"]:
-                    inv["mana potion"] = inv["mana potion"] - 1
-                    battle(matrix, new_pos1, new_pos2, mobhp, inv)
-                else:
-                    del inv["mana potion"]
-                    battle(matrix, new_pos1, new_pos2, mobhp, inv)
-            else:
-                print('You have no Health potions left!')
                 battle(matrix, new_pos1, new_pos2, mobhp, inv)
         else:
-             battle(matrix, new_pos1, new_pos2, mobhp,inv)
+            print("You don't have any items to use. ")
+            time.sleep(1)
+            sys.stdout.write("\033[F")
+            sys.stdout.write("\033[K")
+            battle(matrix, new_pos1, new_pos2, mobhp, inv)
     elif choice == '5':
         roll = (random.randint(1, 6)) + attributes['speed']
         if roll > 4:
@@ -872,9 +980,9 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                 time.sleep(1)
                 sys.exit()
             else:
-                battle(matrix, new_pos1, new_pos2, mobhp,inv)
+                battle(matrix, new_pos1, new_pos2, mobhp, inv)
     else:
-        battle(matrix, new_pos1, new_pos2, mobhp,inv)
+        battle(matrix, new_pos1, new_pos2, mobhp, inv)
 
 
 def game_over(matrix):
@@ -909,9 +1017,9 @@ def talk():
         time.sleep(1)
 
 
-def encounter(matrix, new_pos1, new_pos2):
-    mobhp = 20
+def encounter(matrix, new_pos1, new_pos2):                          #[u"\U0001F577", u"\U0001F6B9", u"\U0001F43A",u"\U0001F40D",u"\U0001F41B"]
     if matrix[new_pos1][new_pos2] == u"\U0001F6B9":
+        mobhp = 15
         print('You have encountered an NPC ')
         choice = input('What would you like to do? ').lower()
         if choice == 'fight':
@@ -924,6 +1032,14 @@ def encounter(matrix, new_pos1, new_pos2):
         elif choice == 'buy':
             buy(inv)
     else:
+        if matrix[new_pos1][new_pos2] == u"\U0001F577":
+            mobhp = 15
+        elif matrix[new_pos1][new_pos2] == u"\U0001F43A":
+            mobhp = 25
+        elif matrix[new_pos1][new_pos2] == u"\U0001F40D":
+            mobhp = 30
+        else:
+            mobhp = 10
         print('You were attacked by a feroucious beast! ')
         print('1. Strong attack\n2. Quick attack\n3. Spell\n4. Use item\n5. Run ')
         battle(matrix, new_pos1, new_pos2,mobhp, inv)
@@ -1161,7 +1277,7 @@ def player_position(matrix, pos1, pos2, MOB_TYPES, inventory, items, equiped):
             npc_type = random.choice(npc_to_display)
             if matrix[npc_pos_x][84] != "#":
                 matrix[npc_pos_x][84] = npc_type
-        item_chance = random.randint(1,2000)
+        item_chance = random.randint(1,1500)
         item_list = [item[1] for item in items]
         if item_chance < 2:
             item_pos_x = random.randint(1,24)
