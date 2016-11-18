@@ -559,9 +559,7 @@ def character_creator():
         char_class = "Battle Mage"
     else:
         char_class = "Folk"
-
     name = input("\t\t\t\t\tPick your's character name: ")
-
     attributes["Name"] = name
     attributes["Class"] = char_class
     os.system("printf '\033c'")
