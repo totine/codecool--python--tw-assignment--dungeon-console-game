@@ -1122,6 +1122,7 @@ def game_over(matrix):
 def travel():
     x = input('Hello! Would you like to go back to definitely not Tristram? (yes for travel): ').lower()
     if x == 'yes':
+        os.system("printf '\033c'")
         tristram()
     else:
         print('As you wish')
