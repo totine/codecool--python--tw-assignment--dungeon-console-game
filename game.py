@@ -1599,26 +1599,8 @@ def making_left_column(attributes, inv):
         line_12 = ("Gold:", str(inv["gold"]))
     else:
         line_12 = ("Gold:", "0")
-    left_column = [
-        blank_line,
-        blank_line,
-        line_1,
-        line_2,
-        blank_line,
-        level_line,
-        blank_line,
-        line_3,
-        line_4,
-        line_5,
-        line_6,
-        line_7,
-        line_8,
-        line_9,
-        blank_line,
-        line_10,
-        line_11,
-        blank_line,
-        line_12]
+    left_column = [blank_line, blank_line, line_1, line_2, blank_line, level_line, blank_line, line_3, line_4,
+                   line_5, absline_6, line_7, line_8, line_9, blank_line, line_10, line_11, blank_line, line_12]
     return left_column
 
 
