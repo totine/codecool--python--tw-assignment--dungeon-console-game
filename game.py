@@ -433,8 +433,8 @@ def print_table(inventory, equiped, items, stats):
         elif decision == 'd':
             drop(inventory, items, stats)
         else:
-            display_background(terrain, left_column)
             return stats
+            display_background(terrain, left_column)
     else:
         print("\n\t\t\t\t\tYou have nothing in your inventory. \n")
         print("\t" * 5 + "Equiped items: \n")
@@ -594,6 +594,8 @@ def character_creator():
         os.system("printf '\033c'")
     attributes.update({'hp': int(10 * attributes['endurance']),
                        'mp': int(10 * attributes['mana']), 'exp': 51, 'lev': 1})
+    global starting_attributes
+    starting_attributes = attributes.copy()
     tristram()
     return attributes
 
