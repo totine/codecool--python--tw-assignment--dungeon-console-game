@@ -1387,13 +1387,13 @@ def player_position(matrix, pos1, pos2, MOB_TYPES, inventory, items, equiped):
             mob_type = random.choice(MOB_TYPES)
             if matrix[mob_pos_x][84] != "#":
                 matrix[mob_pos_x][84] = mob_type
-        npc_chance = random.randint(1, 1000)
+        npc_chance = random.randint(1, 5000)
         if npc_chance < 2:
             npc_pos_x = random.randint(1, 24)
             npc_type = random.choice(npc_to_display)
             if matrix[npc_pos_x][84] != "#":
                 matrix[npc_pos_x][84] = npc_type
-        item_chance = random.randint(1, 1500)
+        item_chance = random.randint(1, 100)
         item_list = [item[1] for item in items]
         if item_chance < 2:
             item_pos_x = random.randint(1, 24)
