@@ -9,10 +9,7 @@ import csv
 import os.path
 
 
-global attributes
-global inv
-global equiped
-global left_column
+
 attributes = {"strenght": 2, "agility": 2, "speed": 2, "power": 2, "endurance": 2, "mana": 2}
 starting_attributes = {}
 TERRX = 86
@@ -643,7 +640,7 @@ def character_creator():
         pass
         os.system("printf '\033c'")
     attributes.update({'hp': int(10 * attributes['endurance']),
-                       'mp': int(10 * attributes['mana']), 'exp': 51, 'lev': 1})
+                       'mp': int(10 * attributes['mana']), 'exp': 0, 'lev': 1})
     global starting_attributes
     starting_attributes = attributes.copy()
     tristram()
@@ -1428,9 +1425,12 @@ def player_position(matrix, pos1, pos2, MOB_TYPES, inventory, items, equiped):
 
 def npc_tristram():
     os.system("printf '\033c'")
-    if attributes['exp'] < 50:
-        print("{:^70}""{:^70}".format("Only the worthy can battle the Lord of the Underworld!\n", "Get more experience!"))
-        time.sleep(1)
+    if attributes['exp'] < 20:
+        print("\n"*8)
+        print("{:^110}""{:^20}".format("Only the worthy can battle the Lord of the Underworld!\n\n",
+              "Get more experience!(20 needed)"))
+        time.sleep(2)
+        os.system("printf '\033c'")
         tristram()
     else:
         print("{:^70}""{:^70}".format("You may meet the Lord of the Underworld now!", ""))
