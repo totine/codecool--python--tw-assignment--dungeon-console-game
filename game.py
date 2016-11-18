@@ -7,14 +7,14 @@ import termios
 import time
 
 global attributes
-attributes = {"strenght" : 2, "agility" : 2, "speed" : 2, "power" : 2, "endurance" : 2, "mana" : 2}
+attributes = {"strenght": 2, "agility": 2, "speed": 2, "power": 2, "endurance": 2, "mana": 2}
 starting_attributes = {}
 TERRX = 86
 TERRY = 25
 WINDOW_ROWS = 35
-WINDOW_COLS = 115
+WINDOW_COLS = 117
 RJUST_SIZE = 105
-MOB_TYPES = [u"\U0001F577", u"\U0001F6B9", u"\U0001F43A",u"\U0001F40D",u"\U0001F41B"]
+MOB_TYPES = [u"\U0001F577", u"\U0001F6B9", u"\U0001F43A", u"\U0001F40D", u"\U0001F41B"]
 inv = {}
 items = [('head', u"\u26D1"), ('chest', u"\U0001F458"), ('legs', u"\U0001F462"),
          ('right hand', '†'), ('left hand', u"\u26E8"), ("hp potion", u"\u2764"),
@@ -60,7 +60,7 @@ def satan():
         print("")
     print("{:^120}".format("PUNY MORTAL!"))
     text = getch()
-    if text == False:
+    if not text:
         pass
     else:
         os.system("printf '\033c'")
@@ -84,7 +84,7 @@ def satan():
                 for i in range(5):
                     print("")
                 print("{:^120}".format("Smashing you in combat wouldn't be a much of task for me..."))
-                if getch() == True:
+                if getch():
                     pass
                 else:
                     os.system("printf '\033c'")
@@ -112,38 +112,58 @@ def win():
     print("{:^130}".format("YOU HAVE DEFEATED ME!"))
     sys.exit()
 
+
 def gameover():
     print("{:^130}".format("YOU HAVE LOST!"))
     sys.exit()
 
+
 def level_up():
-    st_input = input('You leveled up. Type two first letters of an attribute you want to improve!')
+    st_input = input('You leveled up. Type two first letters of an attribute you want to improve!: ')
     if st_input == "st":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["strenght"] += 1
+        starting_attributes['exp'] = 0
+        starting_attributes['lev'] += 1
+        starting_attributes["strenght"] += 1
     elif st_input == "ag":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["agility"] += 1
+        starting_attributes['exp'] = 0
+        starting_attributes['lev'] += 1
+        starting_attributes["agility"] += 1
     elif st_input == "sp":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["speed"] += 1
+        starting_attributes['exp'] = 0
+        starting_attributes['lev'] += 1
+        starting_attributes["speed"] += 1
     elif st_input == "po":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["power"] += 1
+        starting_attributes['exp'] = 0
+        starting_attributes['lev'] += 1
+        starting_attributes["power"] += 1
     elif st_input == "en":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["endurance"] += 1
+        starting_attributes['exp'] = 0
+        starting_attributes['lev'] += 1
+        starting_attributes["endurance"] += 1
     elif st_input == "ma":
         attributes['exp'] = 0
         attributes['lev'] += 1
         attributes["mana"] += 1
+        starting_attributes['exp'] = 0
+        starting_attributes['lev'] += 1
+        starting_attributes["mana"] += 1
     else:
-        st_input = input('That is not one of your attributes!')
+        st_input = input('That is not one of your attributes!(st/en/po/sp/ag/ma): ')
         level_up()
     tristram()
 
@@ -167,10 +187,10 @@ def boss():
         if count > 10:
             gameover()
         else:
-            user_input = input('Guess ').strip()
+            user_input = input('Guess: ').strip()
             while len(user_input) != 3 or not user_input.isnumeric():
                 print('This is not even a three digit number!')
-                user_input = input('Guess ').strip()
+                user_input = input('Guess: ').strip()
             user_input = list(user_input)
             print(user_input)
             if xyz == user_input:
@@ -281,7 +301,8 @@ def equip(inv, items, equiped, stats):
             stats["strenght"] = starting_attributes["strenght"]
             stats["mana"] += 2
     keys = list(inv.keys())
-    values = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0] for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
+    values = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0]
+                                                                                                for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
     if choice in keys and choice in values:
         if inv[choice] > 1:
             inv[choice] = inv[choice] - 1
@@ -304,10 +325,11 @@ def equip(inv, items, equiped, stats):
     return stats
 
 
-def drop(inv, items,stats):
+def drop(inv, items, stats):
     choice = input("Name the thing you want to drop: ")
     keys = list(inv.keys())
-    values = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0] for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
+    values = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0]
+                                                                                                for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
     if choice in keys and choice in values:
         if inv[choice] > 1:
             inv[choice] = inv[choice] - 1
@@ -372,8 +394,10 @@ def print_table(inventory, equiped, items, stats):
         sorted_tuples = sorted(inventory.items(), key=lambda x: -x[1])
         print("\t" * 5 + "{0:>7} {1:>{width}}".format("count", "item name", width=longest_item))
         print("\t" * 5 + "-" * (longest_item + 18))
-        nazwy = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
-        wagi = [seq[1] for seq in head] + [seq[1] for seq in chest] + [seq[1] for seq in legs] + [seq[1] for seq in right_hand] + [seq[1] for seq in left_hand]
+        nazwy = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0]
+                                                                        for seq in legs] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
+        wagi = [seq[1] for seq in head] + [seq[1] for seq in chest] + [seq[1]
+                                                                       for seq in legs] + [seq[1] for seq in right_hand] + [seq[1] for seq in left_hand]
         suma_wag = []
         suma_nazw = []
         suma_liczb = []
@@ -410,10 +434,10 @@ def print_table(inventory, equiped, items, stats):
                 iterator += 1
         decision = input("\n\nDo you want to equip something or drop it? (e/d): ")
         if decision == 'e':
-            equip(inventory, items, equiped,stats)
+            equip(inventory, items, equiped, stats)
             return stats
         elif decision == 'd':
-            drop(inventory, items,stats)
+            drop(inventory, items, stats)
         else:
             return stats
             display_background(terrain, left_column)
@@ -433,13 +457,13 @@ def print_table(inventory, equiped, items, stats):
 
 def character_creator():
 
-
     def rand_creator():
         os.system("printf '\033c'")
         for i in range(2):
             d = random.choice(list(attributes.keys()))
             attributes[d] += 1
         print("\n\n\n\n\n\n\n\n\n")
+
     def creator(attributes):
         print("\n\n\n\n\n\n\n")
         print("{:^105}".format("Create you character.\n"))
@@ -574,27 +598,29 @@ def character_creator():
     else:
         pass
         os.system("printf '\033c'")
-    attributes.update({'hp': int(10* attributes['endurance']), 'mp': int(10*attributes['mana']), 'exp': 51, 'lev': 1})
+    attributes.update({'hp': int(10 * attributes['endurance']),
+                       'mp': int(10 * attributes['mana']), 'exp': 51, 'lev': 1})
     tristram()
     return attributes
 
 
 def main_menu():
     title = [" _        _______ _________   ______  _________ _______  ______   _        _______ ",
-     "( (    /|(  ___  )\__   __/  (  __  \ \__   __/(  ___  )(  ___ \ ( \      (  ___  )",
-      "|  \  ( || (   ) |   ) (     | (  \  )   ) (   | (   ) || (   ) )| (      | (   ) |",
-    "|   \ | || |   | |   | |     | |   ) |   | |   | (___) || (__/ / | |      | |   | |",
-     "| (\ \) || |   | |   | |     | |   | |   | |   |  ___  ||  __ (  | |      | |   | |",
-      "| | \   || |   | |   | |     | |   ) |   | |   | (   ) || (  \ \ | |      | |   | |",
-    "| )  \  || (___) |   | |     | (__/  )___) (___| )   ( || )___) )| (____/\| (___) |",
-     "|/    )_)(_______)   )_(     (______/ \_______/|/     \||/ \___/ (_______/(_______)",
-     "                                                                                   "]
+             "( (    /|(  ___  )\__   __/  (  __  \ \__   __/(  ___  )(  ___ \ ( \      (  ___  )",
+             "|  \  ( || (   ) |   ) (     | (  \  )   ) (   | (   ) || (   ) )| (      | (   ) |",
+             "|   \ | || |   | |   | |     | |   ) |   | |   | (___) || (__/ / | |      | |   | |",
+             "| (\ \) || |   | |   | |     | |   | |   | |   |  ___  ||  __ (  | |      | |   | |",
+             "| | \   || |   | |   | |     | |   ) |   | |   | (   ) || (  \ \ | |      | |   | |",
+             "| )  \  || (___) |   | |     | (__/  )___) (___| )   ( || )___) )| (____/\| (___) |",
+             "|/    )_)(_______)   )_(     (______/ \_______/|/     \||/ \___/ (_______/(_______)",
+             "                                                                                   "]
 
     for line in title:
-        print("{:>110}".format(line))
+        print("{:>100}".format(line))
     m_l = [("" * 2), "1.Start Game", "2.Help", "3.Credits", "4.Quit"]
     for n in m_l:
-        print("{:^130}".format(n))
+        print("{:^110}".format(n))
+        print("")
 
     choice = getch()
 
@@ -604,28 +630,28 @@ def main_menu():
     elif choice == "2":
 
         help_l = [("" * 10), "HELP", "Use WSAD for moving your character.", "I - Inventory",
-                  "P - Quit Game", "1 - Potion"]
+                  "P - Quit Game", "1 - HP potion", "2 - Mana potion"]
         os.system("printf '\033c'")
+        print("\n\n\n\n\n")
         for i in help_l:
             print("{:^110}".format(i))
+        print("")
         print("{:^110}".format("Press ENTER to go back"))
-        if getch() == True:
+        if getch():
             os.system("printf '\033c'")
             main_menu()
         else:
             os.system("printf '\033c'")
             main_menu()
     elif choice == "3":
-        print("{:^120}".format("CREDITS"))
-        print("")
         credits = [("" * 10), "Michał Goździkiewicz", "Joanna Gargaś", "Marek Frankowicz", "Łukasz Bielenin"]
         os.system("printf '\033c'")
-        print("")
+        print("\n\n\n\n\n")
         for s in credits:
             print("{:^110}".format(s))
         print("")
         print("{:^110}".format("Press any key to go back"))
-        if getch() == True:
+        if getch():
             os.system("printf '\033c'")
             main_menu()
         else:
@@ -637,12 +663,13 @@ def main_menu():
         os.system("printf '\033c'")
         main_menu()
 
+
 def background(x, y):
     matrix = []
     for row in range(x):
         matrix.append([])
         for column in range(y):
-            if row == 0 or row == x-1 or column == 0 or column == y-1:
+            if row == 0 or row == x - 1 or column == 0 or column == y - 1:
                 matrix[row].append('#')
             else:
                 matrix[row].append('.')
@@ -651,36 +678,36 @@ def background(x, y):
 
 def start_background():
     matrix = [
-    list("##################################################################################################"),
-    list("#................................................................................................#"),
-    list("#...... .----| |-. ..............................................................................#"),
-    list("#..... /          \................................................###...........................#"),
-    list("#...../____________\ .............................................#o###..........................#"),
-    list("#.....||_|_| /  \  |............................................#####o###........................#"),
-    list("#.....||_|_| | .|  |...........................................#o#\#|#/###.......................#"),
-    list("#.....|______|__|__|............................................###\|/#o#........................#"),
-    list("#................................................................# }|{ #.........................#"),
-    list("#..................................................................|||...........................#"),
-    list("#............................................................................................... #"),
-    list("#......______________............................................................................#"),
-    list("#......|Not Tristram|.........................⛧..................................................#"),
-    list("#.......‾‾‾‾‾|‾|‾‾‾‾................................................................. ###........#"),
-    list("#...................................................................................#o###........#"),
-    list("#.....................................................................)............#####o###.....#"),
-    list("#................................................................/ \ ((...........#o#\#|#/###....#"),
-    list("#.............................................................../   \||............###\|/#o#.....#"),
-    list("#............................................"u"\U0001F6B9""................/     \|.............# }|{ #..\....#"),
-    list("#...................____-^-____.............................../.......\...............}|{........#"),
-    list("#................../     _   ' \..............................|,^, ,^,|..........................#"),
-    list("#................./     |_|     \.............................||_| |_||..........................#"),
-    list("#................/               \............................||_| |_||..........................#"),
-    list("#.............../|     _____     |\...........................|       |..........................#"),
-    list("#............... |    |==|==|    |............................'======='..........................#"),
-    list("#................|    |--|--|    |...............................................................#"),
-    list("#................|    |==|==|    |...............................................................#"),
-    list("#................^^^^^^^^^^^^^^^^^..............@................................................#"),
-    list("#................................................................................................#"),
-    list("##################################################################################################")]
+        list("##################################################################################################"),
+        list("#................................................................................................#"),
+        list("#...... .----| |-. ..............................................................................#"),
+        list("#..... /          \................................................###...........................#"),
+        list("#...../____________\ .............................................#o###..........................#"),
+        list("#.....||_|_| /  \  |............................................#####o###........................#"),
+        list("#.....||_|_| | .|  |...........................................#o#\#|#/###.......................#"),
+        list("#.....|______|__|__|............................................###\|/#o#........................#"),
+        list("#................................................................# }|{ #.........................#"),
+        list("#..................................................................|||...........................#"),
+        list("#............................................................................................... #"),
+        list("#......______________............................................................................#"),
+        list("#......|Not Tristram|.........................⛧..................................................#"),
+        list("#.......‾‾‾‾‾|‾|‾‾‾‾................................................................. ###........#"),
+        list("#...................................................................................#o###........#"),
+        list("#.....................................................................)............#####o###.....#"),
+        list("#................................................................/ \ ((...........#o#\#|#/###....#"),
+        list("#.............................................................../   \||............###\|/#o#.....#"),
+        list("#............................................"u"\U0001F6B9""................/     \|.............# }|{ #..\....#"),
+        list("#...................____-^-____.............................../.......\...............}|{........#"),
+        list("#................../     _   ' \..............................|,^, ,^,|..........................#"),
+        list("#................./     |_|     \.............................||_| |_||..........................#"),
+        list("#................/               \............................||_| |_||..........................#"),
+        list("#.............../|     _____     |\...........................|       |..........................#"),
+        list("#............... |    |==|==|    |............................'======='..........................#"),
+        list("#................|    |--|--|    |...............................................................#"),
+        list("#................|    |==|==|    |...............................................................#"),
+        list("#................^^^^^^^^^^^^^^^^^..............@................................................#"),
+        list("#................................................................................................#"),
+        list("##################################################################################################")]
 
     return matrix
 
@@ -690,55 +717,55 @@ def start_disp(matrix):
         print("".join(i).rjust(RJUST_SIZE, " "))
 
 
-def display_background(matrix,left_column):
-    #for i in matrix:
+def display_background(matrix, left_column):
+    # for i in matrix:
     length_list_1 = [len(str(item[0])) for item in left_column]
     length_list_2 = [len(str(item[1])) for item in left_column]
 
     max_size_1 = max(length_list_1) + 2
     max_size_2 = max(length_list_2) + 2
     #    print(''.join(i).rjust(RJUST_SIZE, " "))
-    for i in range(0,len(matrix)):
+    for i in range(0, len(matrix)):
         if i < len(left_column):
-            print(left_column[i][0].ljust(max_size_1 , " "), str(left_column[i][1]).ljust(max_size_2 , " "), end="")
+            print(left_column[i][0].ljust(max_size_1, " "), str(left_column[i][1]).ljust(max_size_2, " "), end="")
             print(''.join(matrix[i]))
         else:
             print(''.join(matrix[i]).rjust(max_size_1 + max_size_2 + len(matrix[0]) + 1, " "))
 
 
 def random_barriers(game_matrix, max_size=15):
-    barrier_size_x = random.randint(1,max_size)
-    barrier_size_y = random.randint(1,max_size)
-    barrier_start_x = random.randint(1,len(game_matrix)-barrier_size_x)
-    barrier_start_y = random.randint(1,len(game_matrix[0])-barrier_size_y)
-    for i in range(barrier_start_x,barrier_start_x+barrier_size_x):
-        for j in range(barrier_start_y,barrier_start_y+barrier_size_y):
+    barrier_size_x = random.randint(1, max_size)
+    barrier_size_y = random.randint(1, max_size)
+    barrier_start_x = random.randint(1, len(game_matrix) - barrier_size_x)
+    barrier_start_y = random.randint(1, len(game_matrix[0]) - barrier_size_y)
+    for i in range(barrier_start_x, barrier_start_x + barrier_size_x):
+        for j in range(barrier_start_y, barrier_start_y + barrier_size_y):
             game_matrix[i][j] = "#"
     return game_matrix
 
 
 def level_creating(game_matrix):
-    stalactite = random.randint(2,6)
-    stalagmite = random.randint(2,6)
-    for i in range(2,len(game_matrix[0])):
-        stalactite = stalactite + random.randint(-1,1)
-        stalagmite = stalagmite + random.randint(-1,1)
+    stalactite = random.randint(2, 6)
+    stalagmite = random.randint(2, 6)
+    for i in range(2, len(game_matrix[0])):
+        stalactite = stalactite + random.randint(-1, 1)
+        stalagmite = stalagmite + random.randint(-1, 1)
         if stalactite > 7 or stalactite < 2:
-            stalactite = random.randint(2,4)
+            stalactite = random.randint(2, 4)
         if stalagmite > 7 or stalagmite < 2:
-            stalagmite = random.randint(2,4)
-        for j in range(1,stalactite):
+            stalagmite = random.randint(2, 4)
+        for j in range(1, stalactite):
             game_matrix[j][i] = "#"
-        for k in range(1,stalagmite):
+        for k in range(1, stalagmite):
             game_matrix[-k][i] = "#"
     return game_matrix
 
 
 def mobs_positions(game_matrix, mob_list, TERRY, TERRX):
-    mob_pos_x = random.randint(1, TERRY-1)
-    mob_pos_y = random.randint(1, TERRX -1)
+    mob_pos_x = random.randint(1, TERRY - 1)
+    mob_pos_y = random.randint(1, TERRX - 1)
     mob_type = random.choice(mob_list)
-    if game_matrix[mob_pos_x][mob_pos_y] not in ["#","@"]:
+    if game_matrix[mob_pos_x][mob_pos_y] not in ["#", "@"]:
         game_matrix[mob_pos_x][mob_pos_y] = mob_type
     return game_matrix
 
@@ -997,36 +1024,36 @@ def game_over(matrix):
           ░       ░  ░       ░      ░  ░       ░ ░        ░     ░  ░   ░
                                                          ░                   """
     print(len(matrix[0]), len(GAME_OVER[0]), len(matrix), len(GAME_OVER))
-    game_over_start_x = int(((len(matrix[0]) - len(GAME_OVER[0]))/2))
-    game_over_start_y = int(((len(matrix) - len(GAME_OVER))/2))
-    #overwrite matrix cell to ascii cells
+    game_over_start_x = int(((len(matrix[0]) - len(GAME_OVER[0])) / 2))
+    game_over_start_y = int(((len(matrix) - len(GAME_OVER)) / 2))
+    # overwrite matrix cell to ascii cells
     for i in range(game_over_start_y, game_over_start_y + len(GAME_OVER)):
         print(i)
         for j in range(game_over_start_x, game_over_start_x + len(GAME_OVER[0])):
             matrix[i][j] = GAME_OVER[i - game_over_start_y][j - game_over_start_x]
-            print(i,j)
+            print(i, j)
     return matrix
 
 
-def talk():
-    x = input('Hello! Would you like to go back to definitely not Tristram? ').lower()
-    if x == 'yes' :
+def travel():
+    x = input('Hello! Would you like to go back to definitely not Tristram? (yes for travel): ').lower()
+    if x == 'yes':
         tristram()
     else:
         print('As you wish')
         time.sleep(1)
 
 
-def encounter(matrix, new_pos1, new_pos2):                          #[u"\U0001F577", u"\U0001F6B9", u"\U0001F43A",u"\U0001F40D",u"\U0001F41B"]
+def encounter(matrix, new_pos1, new_pos2):  # [u"\U0001F577", u"\U0001F6B9", u"\U0001F43A",u"\U0001F40D",u"\U0001F41B"]
     if matrix[new_pos1][new_pos2] == u"\U0001F6B9":
         mobhp = 15
         print('You have encountered an NPC ')
-        choice = input('What would you like to do? ').lower()
+        choice = input('What would you like to do (fight/travel/sell/buy): ').lower()
         if choice == 'fight':
             print('1. Strong attack\n2. Quick attack\n3. Spell\n4. Use item\n5. Run ')
-            battle(matrix, new_pos1, new_pos2,mobhp,inv)
-        elif choice == 'talk':
-            talk()
+            battle(matrix, new_pos1, new_pos2, mobhp, inv)
+        elif choice == 'travel':
+            travel()
         elif choice == 'sell':
             sell(inv, equiped, items)
         elif choice == 'buy':
@@ -1042,7 +1069,7 @@ def encounter(matrix, new_pos1, new_pos2):                          #[u"\U0001F5
             mobhp = 10
         print('You were attacked by a feroucious beast! ')
         print('1. Strong attack\n2. Quick attack\n3. Spell\n4. Use item\n5. Run ')
-        battle(matrix, new_pos1, new_pos2,mobhp, inv)
+        battle(matrix, new_pos1, new_pos2, mobhp, inv)
     return matrix
 
 
@@ -1057,8 +1084,10 @@ def sell(inventory, equiped, items):
         sorted_tuples = sorted(inventory.items(), key=lambda x: -x[1])
         print("\t" * 5 + "{0:>7} {1:>{width}}".format("count", "item name", width=longest_item))
         print("\t" * 5 + "-" * ((longest_item) + 18))
-        nazwy = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
-        wagi = [seq[1] for seq in head] + [seq[1] for seq in chest] + [seq[1] for seq in legs] + [seq[1] for seq in right_hand] + [seq[1] for seq in left_hand]
+        nazwy = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0]
+                                                                        for seq in legs] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
+        wagi = [seq[1] for seq in head] + [seq[1] for seq in chest] + [seq[1]
+                                                                       for seq in legs] + [seq[1] for seq in right_hand] + [seq[1] for seq in left_hand]
         suma_wag = []
         suma_nazw = []
         suma_liczb = []
@@ -1086,7 +1115,8 @@ def sell(inventory, equiped, items):
         print("\t" * 5 + "Total weight: %.1f" % suma)
         choice = input("What do you want to sell?(n to exit): ")
         keys = list(inv.keys())
-        values = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0] for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
+        values = [seq[0] for seq in head] + [seq[0] for seq in chest] + [seq[0] for seq in legs] + [seq[0]
+                                                                                                    for seq in head] + [seq[0] for seq in right_hand] + [seq[0] for seq in left_hand]
         if choice == "n":
             pass
         elif choice in keys and choice in values:
@@ -1114,7 +1144,7 @@ def sell(inventory, equiped, items):
 def buy(inventory):
     sys.stdout.write("\033[F")
     sys.stdout.write("\033[K")
-    choice = input("What do you want? hp potion, or mana potion? 10 g each!: ")
+    choice = input("What do you want? 'hp potion', or 'mana potion'? 10 g each!: ")
     sys.stdout.write("\033[F")
     sys.stdout.write("\033[K")
     while choice == "hp potion" or choice == "mana potion":
@@ -1175,7 +1205,6 @@ def buy(inventory):
 
 
 def pick_up(matrix, new_pos1, new_pos2, inventory, items):
-    #global inv
     old_player_pos = [(index, row.index("@")) for index, row in enumerate(matrix) if "@" in row]
     old_player_pos = old_player_pos[0]
     old_pos1 = old_player_pos[0]
@@ -1183,8 +1212,6 @@ def pick_up(matrix, new_pos1, new_pos2, inventory, items):
     itemsss = [seq[1] for seq in items]
     if matrix[new_pos1][new_pos2] in itemsss:
         picked_loot = matrix[new_pos1][new_pos2]
-
-        #inv = add_to_inventory(inventory, picked_loot)
         matrix[new_pos1][new_pos2] = "@"
         matrix[old_pos1][old_pos2] = "."
         item_random(picked_loot, inventory)
@@ -1193,26 +1220,26 @@ def pick_up(matrix, new_pos1, new_pos2, inventory, items):
 
 def new_column(matrix):
     old_stalactite = 0
-    for i in range(1,14):
+    for i in range(1, 14):
         if matrix[i][83] == "#":
             old_stalactite += 1
-    stalactite = old_stalactite + random.choice([-1,0,1,1,1,2,3,4,3,3,4])
+    stalactite = old_stalactite + random.choice([-1, 0, 1, 1, 1, 2, 3, 4, 3, 3, 4])
     old_stalagmite = 0
-    for i in range(len(matrix)-8,len(matrix)-1):
+    for i in range(len(matrix) - 8, len(matrix) - 1):
         if matrix[i][83] == "#":
             old_stalagmite += 1
-    stalagmite = old_stalagmite + random.choice([-1,0,1,1,1,2,3,4,3,3,4])
+    stalagmite = old_stalagmite + random.choice([-1, 0, 1, 1, 1, 2, 3, 4, 3, 3, 4])
     if stalactite + stalagmite > 20:
         stalactite = stalactite - 2
         stalagmite = stalagmite - 2
 
-    for j in range(1,stalactite):
-                matrix[j][84] = "#"
-    for k in range(0,stalagmite):
+    for j in range(1, stalactite):
+        matrix[j][84] = "#"
+    for k in range(0, stalagmite):
         matrix[-k][84] = "#"
 
     last_column_list = []
-    for i in range(1,len(matrix)-1):
+    for i in range(1, len(matrix) - 1):
         last_column_list.append(matrix[i][84])
 
     return last_column_list
@@ -1254,33 +1281,33 @@ def player_position(matrix, pos1, pos2, MOB_TYPES, inventory, items, equiped):
     elif matrix[new_pos1][new_pos2] in itemsss:
         pick_up(matrix, new_pos1, new_pos2, inventory, items)
     if new_pos2 == 60:
-        for i in range(1,len(matrix)):
-            for j in range(1,len(matrix[0])-2):
-                matrix[i][j] = matrix[i][j+1]
-        for i in range(1,len(matrix)-1):
+        for i in range(1, len(matrix)):
+            for j in range(1, len(matrix[0]) - 2):
+                matrix[i][j] = matrix[i][j + 1]
+        for i in range(1, len(matrix) - 1):
             matrix[i][84] = "."
         last_column_content = new_column(matrix)
-        for i in range(1,len(matrix)-2):
+        for i in range(1, len(matrix) - 2):
             matrix[i][84] = last_column_content[i]
         npc_index = MOB_TYPES.index(u"\U0001F6B9")
         npc_to_display = MOB_TYPES[npc_index]
         mob_list_without_npc = MOB_TYPES[:npc_index:]
-        mob_chance = random.randint(1,100)
+        mob_chance = random.randint(1, 100)
         if mob_chance > 40:
-            mob_pos_x = random.randint(1,24)
+            mob_pos_x = random.randint(1, 24)
             mob_type = random.choice(MOB_TYPES)
             if matrix[mob_pos_x][84] != "#":
                 matrix[mob_pos_x][84] = mob_type
-        npc_chance = random.randint(1,1000)
+        npc_chance = random.randint(1, 1000)
         if npc_chance < 2:
-            npc_pos_x = random.randint(1,24)
+            npc_pos_x = random.randint(1, 24)
             npc_type = random.choice(npc_to_display)
             if matrix[npc_pos_x][84] != "#":
                 matrix[npc_pos_x][84] = npc_type
-        item_chance = random.randint(1,1500)
+        item_chance = random.randint(1, 1500)
         item_list = [item[1] for item in items]
         if item_chance < 2:
-            item_pos_x = random.randint(1,24)
+            item_pos_x = random.randint(1, 24)
             item_type = random.choice(item_list)
             if matrix[item_pos_x][84] != "#":
                 matrix[item_pos_x][84] = item_type
@@ -1309,7 +1336,7 @@ def player_position(matrix, pos1, pos2, MOB_TYPES, inventory, items, equiped):
 
 def npc_tristram():
     #os.system("printf '\033c'")
-    if attributes['exp']<50:
+    if attributes['exp'] < 50:
         print("{:^70}""{:^70}".format("Only the worthy can battle the Lord of the Underworld!\n", "Get more experience!"))
         time.sleep(1)
         tristram()
@@ -1317,13 +1344,17 @@ def npc_tristram():
         print("{:^70}""{:^70}".format("You may meet the Lord of the Underworld now!", ""))
         boss()
 
+
 def go_to_dungeon():
+    os.system("printf '\033c'")
     terrain = background(TERRY, TERRX)
     terrain[int(TERRY / 2)][1] = "@"
-    terrain = level_creating(terrain)
     for i in range(10):
         terrain = mobs_positions(terrain, MOB_TYPES, TERRY, TERRX)
         terrain = items2_positions(terrain, MOB_TYPES, items)
+    terrain = level_creating(terrain)
+    left_column = making_left_column(attributes, inv)
+    display_background(terrain, left_column)
     while 1:
         x = getch()
         if x == 'p':
@@ -1375,6 +1406,7 @@ def go_to_dungeon():
 
 def tristram():
     start_terrain = start_background()
+    start_disp(start_terrain)
     while 1:
         x = getch()
         if x == 'p':
@@ -1389,26 +1421,26 @@ def tristram():
 
 def new_column(matrix):
     old_stalactite = 0
-    for i in range(1,14):
+    for i in range(1, 14):
         if matrix[i][83] == "#":
             old_stalactite += 1
-    stalactite = old_stalactite + random.choice([-1,0,1,1,1,2,3,4,3,3,4])
+    stalactite = old_stalactite + random.choice([-1, 0, 1, 1, 1, 2, 3, 4, 3, 3, 4])
     old_stalagmite = 0
-    for i in range(len(matrix)-8,len(matrix)-1):
+    for i in range(len(matrix) - 8, len(matrix) - 1):
         if matrix[i][83] == "#":
             old_stalagmite += 1
-    stalagmite = old_stalagmite + random.choice([-1,0,1,1,1,2,3,4,3,3,4])
+    stalagmite = old_stalagmite + random.choice([-1, 0, 1, 1, 1, 2, 3, 4, 3, 3, 4])
     if stalactite + stalagmite > 20:
         stalactite = stalactite - 2
         stalagmite = stalagmite - 2
 
-    for j in range(1,stalactite):
-                matrix[j][84] = "#"
-    for k in range(0,stalagmite):
+    for j in range(1, stalactite):
+        matrix[j][84] = "#"
+    for k in range(0, stalagmite):
         matrix[-k][84] = "#"
 
     last_column_list = []
-    for i in range(1,len(matrix)-1):
+    for i in range(1, len(matrix) - 1):
         last_column_list.append(matrix[i][84])
 
     return last_column_list
@@ -1443,13 +1475,12 @@ def user_input(x):
             position_x = 0
             position_y = 1
 
-
     return position_x, position_y
 
 
 def making_left_column(attributes, inv):
     keys = list(inv.keys())
-    blank_line = ["",""]
+    blank_line = ["", ""]
     line_1 = ["Name", attributes["Name"]]
     line_2 = ["Class", attributes["Class"]]
     level_line = ["Level", attributes['lev']]
@@ -1457,8 +1488,8 @@ def making_left_column(attributes, inv):
     line_4 = ["Speed", attributes["speed"]]
     line_5 = ["Strenght", attributes["strenght"]]
     line_6 = ["Power", attributes["power"]]
-    line_7 = ["HP", str(attributes["hp"])+"/"+str(attributes["endurance"]*10)]
-    line_8 = ["MP", str(attributes["mp"])+"/"+str(attributes["mana"]*10)]
+    line_7 = ["HP", str(attributes["hp"]) + "/" + str(attributes["endurance"] * 10)]
+    line_8 = ["MP", str(attributes["mp"]) + "/" + str(attributes["mana"] * 10)]
     line_9 = ["Exp", attributes["mana"]]
     if "hp potion" in keys and "mana potion" in keys:
         line_10 = ("Hp potions:", str(inv["hp potion"]))
@@ -1476,13 +1507,27 @@ def making_left_column(attributes, inv):
         line_12 = ("Gold:", str(inv["gold"]))
     else:
         line_12 = ("Gold:", "0")
-    left_column = [blank_line, blank_line, line_1, line_2, blank_line,level_line, blank_line, line_3, line_4, line_5, line_6, line_7, line_8, line_9, blank_line, line_10, line_11,blank_line, line_12]
+    left_column = [
+        blank_line,
+        blank_line,
+        line_1,
+        line_2,
+        blank_line,
+        level_line,
+        blank_line,
+        line_3,
+        line_4,
+        line_5,
+        line_6,
+        line_7,
+        line_8,
+        line_9,
+        blank_line,
+        line_10,
+        line_11,
+        blank_line,
+        line_12]
     return left_column
 
 
-
-
-
 main_menu()
-
-
