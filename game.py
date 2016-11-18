@@ -5,8 +5,14 @@ import random
 import tty
 import termios
 import time
+import csv
+import os.path
+
 
 global attributes
+global inv
+global equiped
+global left_column
 attributes = {"strenght": 2, "agility": 2, "speed": 2, "power": 2, "endurance": 2, "mana": 2}
 starting_attributes = {}
 TERRX = 86
@@ -29,7 +35,6 @@ right_hand = [("sword", 1.5), ("wand", 0.2)]
 left_hand = [("shield", 3), ("spell book", 1)]
 os.system("printf '\033c'")
 sys.stdout.write("\x1b[8;{rows};{cols}t".format(rows=WINDOW_ROWS, cols=WINDOW_COLS))
-global left_column
 
 
 demon = ("""
@@ -105,10 +110,63 @@ def greetings():
     print ('\nI have thought up a number. You have 10 guesses to get it.')
 
 
+def load():
+    global attributes, inv, equiped, starting_attributes
+    with open("inv.csv", "a+") as f:
+        f.seek(0)
+        reader = csv.reader(f)
+        read_dict = dict(reader)
+        for key in read_dict:
+            read_dict[key] = int(read_dict[key])
+        inv = Counter(read_dict)
+    with open("att.csv", "a+") as f:
+        f.seek(0)
+        reader = csv.reader(f)
+        read_dict = dict(reader)
+        for key in read_dict:
+            if read_dict[key] == read_dict["Name"] or read_dict[key] == read_dict["Class"]:
+                read_dict[key] = read_dict[key]
+            else:
+                read_dict[key] = int(read_dict[key])
+        attributes = Counter(read_dict)
+    with open("satt.csv", "a+") as f:
+        f.seek(0)
+        reader = csv.reader(f)
+        read_dict = dict(reader)
+        for key in read_dict:
+            if read_dict[key] == read_dict["Name"] or read_dict[key] == read_dict["Class"]:
+                read_dict[key] = read_dict[key]
+            else:
+                read_dict[key] = int(read_dict[key])
+        starting_attributes = Counter(read_dict)
+    with open("eq.csv", "a+") as f:
+        f.seek(0)
+        read = csv.reader(f)
+        eq = []
+        for key in read:
+            eq.append(tuple(key))
+        equiped = eq
+    os.system("printf '\033c'")
+    tristram()
 
 
-
-
+def save():
+    with open("inv.csv", "w+") as f:
+        w = csv.writer(f)
+        for key, value in inv.items():
+            w.writerow([key, value])
+    with open("att.csv", "w+") as f:
+        w = csv.writer(f)
+        for key, value in attributes.items():
+            w.writerow([key, value])
+    with open("satt.csv", "w+") as f:
+        w = csv.writer(f)
+        for key, value in starting_attributes.items():
+            w.writerow([key, value])
+    with open("eq.csv", "w+") as f:
+        w = csv.writer(f)
+        for key in equiped:
+            w.writerow([key[0], key[1]])
 
 def level_up():
     st_input = input('\t\tYou leveled up. Type two first letters of an attribute you want to improve!: ')
@@ -605,7 +663,7 @@ def main_menu():
 
     for line in title:
         print("{:>100}".format(line))
-    m_l = [("" * 2), "1.Start Game", "2.Help", "3.Credits", "4.Quit"]
+    m_l = [("" * 2), "1.Start Game", "2.Load Game", "3.Help", "4.Credits", "5.Quit"]
     for n in m_l:
         print("{:^110}".format(n))
         print("")
@@ -616,7 +674,16 @@ def main_menu():
         os.system("printf '\033c'")
         character_creator()
     elif choice == "2":
+        if os.path.isfile('inv.csv'):
+            load()
+        else:
+            print("\n"*5)
+            print("{0:^110}".format("You don't have any save file. "))
+            time.sleep(1)
+            os.system("printf '\033c'")
+            main_menu()
 
+    elif choice == "3":
         help_l = [("" * 10), "HELP", "Use WSAD for moving your character.", "I - Inventory",
                   "P - Quit Game", "1 - HP potion", "2 - Mana potion"]
         os.system("printf '\033c'")
@@ -631,7 +698,7 @@ def main_menu():
         else:
             os.system("printf '\033c'")
             main_menu()
-    elif choice == "3":
+    elif choice == "4":
         credits = [("" * 10), "Michał Goździkiewicz", "Joanna Gargaś", "Marek Frankowicz", "Łukasz Bielenin"]
         os.system("printf '\033c'")
         print("\n\n\n\n\n")
@@ -645,7 +712,7 @@ def main_menu():
         else:
             os.system("printf '\033c'")
             main_menu()
-    elif choice == "4":
+    elif choice == "5":
         sys.exit()
     else:
         os.system("printf '\033c'")
@@ -1065,7 +1132,7 @@ def encounter(matrix, new_pos1, new_pos2):  # [u"\U0001F577", u"\U0001F6B9", u"\
     if matrix[new_pos1][new_pos2] == u"\U0001F6B9":
         mobhp = 15
         print('You have encountered an NPC ')
-        choice = input('What would you like to do (fight/travel/sell/buy): ').lower()
+        choice = input('What would you like to do (fight/travel/sell/buy/save): ').lower()
         if choice == 'fight':
             print('1. Strong attack\n2. Quick attack\n3. Spell\n4. Use item\n5. Run ')
             battle(matrix, new_pos1, new_pos2, mobhp, inv)
@@ -1075,6 +1142,13 @@ def encounter(matrix, new_pos1, new_pos2):  # [u"\U0001F577", u"\U0001F6B9", u"\
             sell(inv, equiped, items)
         elif choice == 'buy':
             buy(inv)
+        elif choice == 'save':
+            print("Your progress has been saved: ")
+            time.sleep(1)
+            save()
+        else:
+            print("Farewell!")
+            time.sleep(1)
     else:
         if matrix[new_pos1][new_pos2] == u"\U0001F577":
             mobhp = 15
