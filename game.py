@@ -9,7 +9,6 @@ import csv
 import os.path
 
 
-
 attributes = {"strenght": 2, "agility": 2, "speed": 2, "power": 2, "endurance": 2, "mana": 2}
 starting_attributes = {}
 TERRX = 86
@@ -164,6 +163,7 @@ def save():
         w = csv.writer(f)
         for key in equiped:
             w.writerow([key[0], key[1]])
+
 
 def level_up():
     st_input = input('\t\tYou leveled up. Type two first letters of an attribute you want to improve!: ')
@@ -861,7 +861,7 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
             if attributes['hp'] < 1:
                 matrix = game_over(matrix)
                 os.system("printf '\033c'")
-                display_background(matrix,[["",""]])
+                display_background(matrix, [["", ""]])
                 sys.exit()
             else:
                 battle(matrix, new_pos1, new_pos2, mobhp, inv)
@@ -935,7 +935,7 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                 if attributes['hp'] < 1:
                     matrix = game_over(matrix)
                     os.system("printf '\033c'")
-                    display_background(matrix,[["",""]])
+                    display_background(matrix, [["", ""]])
                     sys.exit()
                 else:
                     battle(matrix, new_pos1, new_pos2, mobhp, inv)
@@ -973,7 +973,7 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
                 if attributes['hp'] < 1:
                     matrix = game_over(matrix)
                     os.system("printf '\033c'")
-                    display_background(matrix,[["",""]])
+                    display_background(matrix, [["", ""]])
                     sys.exit()
                 else:
                     battle(matrix, new_pos1, new_pos2, mobhp, inv)
@@ -1058,7 +1058,7 @@ def battle(matrix, new_pos1, new_pos2, mobhp, inv):
             if attributes['hp'] < 1:
                 matrix = game_over(matrix)
                 os.system("printf '\033c'")
-                display_background(matrix,[["",""]])
+                display_background(matrix, [["", ""]])
                 sys.exit()
             else:
                 battle(matrix, new_pos1, new_pos2, mobhp, inv)
